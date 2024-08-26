@@ -1,0 +1,20 @@
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import "./style.css";
+import App from "./App.vue";
+import router from "./routes/index.js";
+import Profile from "./infra/profile.js";
+import Vote from "./infra/vote.js";
+import Token from "./infra/token.js";
+
+const profile = new Profile();
+const vote = new Vote();
+const token = new Token();
+profile.init(window);
+vote.init(window);
+token.init(window);
+const pinia = createPinia();
+const app = createApp(App);
+app.use(router);
+app.use(pinia);
+app.mount("#app");
