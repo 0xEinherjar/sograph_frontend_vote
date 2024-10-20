@@ -9,7 +9,8 @@ import { useModeratorStore } from "../store/moderator.js";
 import { abi, contract } from "../contracts/Token.js";
 import { ButtonStake } from "./";
 import { contract as contractVoting } from "../contracts/Voting.js";
-const { moderator } = storeToRefs(useModeratorStore());
+const moderatorStore = useModeratorStore();
+const { moderator } = storeToRefs(moderatorStore);
 const { readTokenContract } = useReadTokenContract();
 const { readVotingContract } = useReadVotingContract();
 const { writeContractAsync, data } = useWriteContract();
@@ -40,6 +41,10 @@ async function approve(amount) {
     functionName: "approve",
     args: [contractVoting, amount],
   });
+}
+
+function stakeEvent() {
+  moderatorStore.setActive(true);
 }
 
 async function handleAction() {
@@ -99,7 +104,7 @@ onMounted(async () => {
     </div>
     <template v-if="moderator.isConnected">
       <button v-if="!isSuccess" @click="handleAction" class="c-panel__button c-panel__button-primary" type="button">Approve</button>
-      <button-stake v-else :amount="amount"/>
+      <button-stake v-else @stake="stakeEvent" :amount="amount"/>
     </template>
     <button v-else class="c-panel__button c-panel__button-primary" type="button">Connect</button>
     <span class="c-panel__line"></span>
