@@ -1,13 +1,16 @@
 <script setup>
-import { computed, ref } from "vue";
-import loading from "./loading.vue";
-import Vote from "../infra/vote.js";
+import { computed, onMounted, ref, watch } from "vue";
+import { Loading } from "./";
+import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
+import { abi, contract } from "../contracts/Voting.js";
+const { writeContractAsync, data } = useWriteContract();
+const props = defineProps(["profile", "classButton"]);
 const show = ref(false);
+const isLoading = ref(false);
 const form = ref({
   profile: "",
   reason: "",
 });
-const isLoading = ref(false);
 
 const isFormDisabled = computed(() => {
   return form.value.profile.length === 0 || form.value.reason.length === 0;
@@ -20,26 +23,33 @@ function togglePlaceholder(event) {
   );
   placeholder.classList.toggle("is-hidden", event.target.innerText.length > 0);
 }
-
 async function create() {
   isLoading.value = true;
   try {
-    const vote = new Vote();
-    const { success } = await vote.createAssessment({
-      profile: form.value.profile,
-      reason: form.value.reason,
+    await writeContractAsync({
+      abi: abi,
+      address: contract,
+      functionName: "createAssessment",
+      args: [form.value.profile, form.value.reason],
     });
-    if (success) {
-      form.value.profile = "";
-      form.value.reason = "";
-      show.value = false;
-    }
   } catch (error) {
-    console.error("Error creating assessment:", error);
-  } finally {
     isLoading.value = false;
   }
 }
+const { isSuccess } = useWaitForTransactionReceipt({
+  hash: data,
+});
+watch(isSuccess, async (newIsSuccess) => {
+  if (newIsSuccess) {
+    form.value.profile = "";
+    form.value.reason = "";
+    show.value = false;
+    isLoading.value = false;
+  }
+});
+onMounted(() => {
+  form.value.profile = props.profile || "";
+});
 </script>
 <!-- prettier-ignore -->
 <template>
@@ -79,7 +89,7 @@ async function create() {
       </form>
     </div>
   </Teleport>
-  <button @click="show = true" class="header__button u-flex-line u-flex-line-center" type="button">Create an assessment</button>
+  <button @click="show = true" :class="props.classButton" type="button">Create an assessment</button>
 </template>
 <style>
 .create-proposal {

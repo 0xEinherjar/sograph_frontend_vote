@@ -2,24 +2,26 @@ import { useUtils } from "../composables/utils.js";
 const { toNumber } = useUtils();
 
 export const usePrepare = () => {
-  const isValidIPFSUrl = (url) => url?.startsWith("https://ipfs.io/ipfs/");
+  async function fetchAndValidateMetadata(url) {
+    if (!url.startsWith("https://ipfs.io/ipfs/")) return null;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Falha ao buscar metadata");
+    const metadata = await response.json();
+    return metadata;
+  }
 
-  async function profile(data) {
-    const metadataURL = data[0];
-
-    if (!isValidIPFSUrl(metadataURL)) return null;
-    const metadata = await fetch(metadataURL).then((response) =>
-      response.json()
-    );
-    const avatar = isValidIPFSUrl(metadata.avatar) ? metadata.avatar : null;
+  function processProfileData(data, metadata) {
     return {
-      avatar: avatar,
+      avatar:
+        metadata.avatar && metadata.avatar.startsWith("https://ipfs.io/ipfs/")
+          ? metadata.avatar
+          : null,
       name: metadata.name,
       description: metadata.description,
-      handle: data[1],
-      hasSubscription: data[4],
-      following: toNumber(data[2]),
-      followers: toNumber(data[3]),
+      handle: data.handle,
+      hasSubscription: data.hasSubscription,
+      following: toNumber(data.following),
+      followers: toNumber(data.followers),
       biography: metadata.biography,
       location: metadata.location,
       createdAt: metadata.created_at,
@@ -27,5 +29,21 @@ export const usePrepare = () => {
     };
   }
 
-  return { profile };
+  async function profile(data) {
+    const metadata = await fetchAndValidateMetadata(data.metadata);
+    if (!metadata) return null;
+    return processProfileData(data, metadata);
+  }
+
+  async function profileToCaller(data) {
+    const metadata = await fetchAndValidateMetadata(data.metadata);
+    if (!metadata) return null;
+    const profile = processProfileData(data, metadata);
+    return Object.assign(profile, {
+      isFollowing: data.isFollowing,
+      isFollower: data.isFollower,
+    });
+  }
+
+  return { profile, profileToCaller };
 };

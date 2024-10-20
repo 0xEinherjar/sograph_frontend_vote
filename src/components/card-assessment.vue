@@ -1,10 +1,11 @@
 <script setup>
-import Avatar from "./avatar.vue";
-import Vote from "../infra/vote.js";
+import { Avatar, ButtonExecute } from "./";
 import { useUtils } from "../composables/utils.js";
 import { computed, onMounted, ref } from "vue";
 import { useModeratorStore } from "../store/moderator.js";
 import { storeToRefs } from "pinia";
+import { useWriteContract } from "@wagmi/vue";
+import { abi, contract } from "../contracts/Voting.js";
 
 const props = defineProps([
   "reason",
@@ -19,7 +20,7 @@ const props = defineProps([
   "profileName",
   "profileHandle",
 ]);
-
+const { writeContractAsync } = useWriteContract();
 const { isAddress, truncateAddress, copyContent } = useUtils();
 const moderatorStore = useModeratorStore();
 const { moderator } = storeToRefs(moderatorStore);
@@ -75,22 +76,20 @@ async function vote() {
   const voteTarget = voteMap[selectedOption.innerText] || 0;
   if (voteTarget !== 0) {
     try {
-      const voteInstance = new Vote();
-      await voteInstance.vote({ id: props.id, option: voteTarget });
+      await writeContractAsync({
+        abi: abi,
+        address: contract,
+        functionName: "vote",
+        args: [props.id, voteTarget],
+      });
     } catch (error) {
       console.error("Error while voting:", error);
     }
   }
 }
 
-async function execute(id) {
-  try {
-    const voteInstance = new Vote();
-    const { success } = await voteInstance.executeAssessment({ id });
-    if (success) executedAssessment.value = true;
-  } catch (error) {
-    console.error("Error executing assessment:", error);
-  }
+async function executed() {
+  executedAssessment.value = true;
 }
 onMounted(() => {
   executedAssessment.value = props.executed;
@@ -140,7 +139,7 @@ onMounted(() => {
       </div>
       <button @click="vote" class="assessment__card-vote-action" type="button">Vote</button>
     </div>
-    <button v-if="props.state != 2 && props.state != 1 && !executedAssessment" @click="execute(props.id)" class="assessment__card-button-execute">Execute</button>
+    <button-execute :id="props.id" @executed="executed" v-if="props.state != 2 && props.state != 1 && !executedAssessment"/>
   </template>
   <template v-else>
     <div v-if="props.state == 2" class="u-flex-line">

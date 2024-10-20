@@ -1,20 +1,20 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import "./style.css";
-import App from "./App.vue";
+import { WagmiPlugin } from "@wagmi/vue";
+import { QueryClient, VueQueryPlugin } from "@tanstack/vue-query";
+import { Buffer } from "buffer";
 import router from "./routes/index.js";
-import Profile from "./infra/profile.js";
-import Vote from "./infra/vote.js";
-import Token from "./infra/token.js";
+import { config } from "./wagmi.js";
+import App from "./App.vue";
+import "./style.css";
 
-const profile = new Profile();
-const vote = new Vote();
-const token = new Token();
-profile.init(window);
-vote.init(window);
-token.init(window);
+globalThis.Buffer = Buffer;
+
+const queryClient = new QueryClient();
 const pinia = createPinia();
 const app = createApp(App);
 app.use(router);
 app.use(pinia);
+app.use(WagmiPlugin, { config });
+app.use(VueQueryPlugin, { queryClient });
 app.mount("#app");

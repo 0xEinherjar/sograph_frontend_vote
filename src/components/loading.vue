@@ -13,6 +13,7 @@ const { type } = defineProps(["type"]);
   border-color: rgba(244, 244, 244, 0.3);
   border-top-color: #f4f4f4;
   animation: spin 1s ease-in-out infinite;
+  margin-inline: auto;
   -webkit-animation: spin 1s ease-in-out infinite;
 }
 .c-loader--small {

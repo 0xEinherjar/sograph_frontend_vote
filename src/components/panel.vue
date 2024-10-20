@@ -1,33 +1,70 @@
 <script setup>
-import { ref } from "vue";
-const props = defineProps([
-  "amountToken",
-  "balance",
-  "valueMinParticipation",
-  "isActive",
-  "isConnected",
-]);
-
+import { onMounted, ref } from "vue";
+import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
+import { storeToRefs } from "pinia";
+import { useReadTokenContract } from "../composables/useReadTokenContract.js";
+import { useReadVotingContract } from "../composables/useReadVotingContract.js";
+import { useUtils } from "../composables/utils.js";
+import { useModeratorStore } from "../store/moderator.js";
+import { abi, contract } from "../contracts/Token.js";
+import { ButtonStake } from "./";
+import { contract as contractVoting } from "../contracts/Voting.js";
+const { moderator } = storeToRefs(useModeratorStore());
+const { readTokenContract } = useReadTokenContract();
+const { readVotingContract } = useReadVotingContract();
+const { writeContractAsync, data } = useWriteContract();
+const { toNumber } = useUtils();
 const select = ref("Stake");
 const amountVote = ref();
-
-const participant = ref({
-  isActive: false,
-  balance: 0,
-  amountToken: 0,
-});
+const minParticipation = ref(0);
+const minParticipationDisplay = ref(0);
+const decimals = ref(0);
+const amount = ref(0);
 function panelSelect(param) {
   select.value = param;
 }
-
 function max() {
-  if (!props.isConnected) return;
+  if (!moderator.value.isConnected) return;
   if (select.value == "Stake") {
-    amountVote.value = props.amountToken;
+    amountVote.value =
+      moderator.value.totalToken / 10 ** Number(decimals.value);
   } else {
-    amountVote.value = props.balance;
+    amountVote.value = moderator.value.balance;
   }
 }
+
+async function approve(amount) {
+  await writeContractAsync({
+    abi: abi,
+    address: contract,
+    functionName: "approve",
+    args: [contractVoting, amount],
+  });
+}
+
+async function handleAction() {
+  amount.value = amountVote.value * 10 ** decimals.value;
+  if (select.value == "Stake") {
+    if (amount.value < toNumber(minParticipation.value)) return;
+    await approve(amount.value);
+  } else {
+    await writeContractAsync({
+      abi: abiVoting,
+      address: contractVoting,
+      functionName: "withdraw",
+      args: [BigInt(amount)],
+    });
+  }
+}
+const { isSuccess } = useWaitForTransactionReceipt({
+  hash: data,
+});
+onMounted(async () => {
+  minParticipation.value = await readVotingContract("minParticipation");
+  decimals.value = await readTokenContract("decimals");
+  minParticipationDisplay.value =
+    Number(minParticipation.value) / 10 ** Number(decimals.value);
+});
 </script>
 <!-- prettier-ignore -->
 <template>
@@ -35,8 +72,8 @@ function max() {
     <div class="c-panel__header u-flex-line">
       <div class="c-panel__text c-panel__text--fluid">Account balance</div>
       <div class="c-panel__text">
-        <template v-if="props.isConnected">
-          {{ props.balance }}
+        <template v-if="moderator.isConnected">
+          {{ Number(moderator.balance)/10**Number(decimals) }}
         </template>
         <template v-else>0</template>
         <span class="c-panel__text-secondary"> Graph</span>
@@ -56,15 +93,18 @@ function max() {
       </div>
     </div>
     <div class="c-panel__field u-flex-line">
-      <input v-if="select=='Stake'" class="c-panel__field-input" type="text" v-model="amountVote" :placeholder="`Minimum of ${props.valueMinParticipation} Graph`">
+      <input v-if="select=='Stake'" class="c-panel__field-input" type="text" v-model="amountVote" :placeholder="`Minimum of ${minParticipationDisplay} Graph`">
       <input v-else class="c-panel__field-input" type="text" v-model="amountVote" placeholder="0">
       <button class="c-panel__field-button" type="button" @click="max">Max</button>
     </div>
-    <button v-if="props.isConnected" @click="$emit('handleAction', { amountVote: amountVote, select: select })" class="c-panel__button c-panel__button-primary" type="button">Confirm</button>
+    <template v-if="moderator.isConnected">
+      <button v-if="!isSuccess" @click="handleAction" class="c-panel__button c-panel__button-primary" type="button">Approve</button>
+      <button-stake v-else :amount="amount"/>
+    </template>
     <button v-else class="c-panel__button c-panel__button-primary" type="button">Connect</button>
     <span class="c-panel__line"></span>
     <button class="c-panel__button c-panel__button-primary c-soon" type="button">Claim Rewards</button>
-    <button v-if="props.isActive && props.isConnected" class="c-panel__button c-panel__button-active" type="button">Active</button>
+    <button v-if="moderator.isActive && moderator.isConnected" class="c-panel__button c-panel__button-active" type="button">Active</button>
     <button v-else class="c-panel__button c-panel__button-no-active" type="button">No active</button>
   </div>
 </template>
