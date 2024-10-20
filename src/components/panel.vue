@@ -43,8 +43,9 @@ async function approve(amount) {
   });
 }
 
-function stakeEvent() {
+function stakeEvent(amount) {
   moderatorStore.setActive(true);
+  moderatorStore.setBalance(moderator.value.balance + amount);
 }
 
 async function handleAction() {

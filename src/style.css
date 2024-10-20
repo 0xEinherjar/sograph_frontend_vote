@@ -198,7 +198,7 @@ body {
 }
 .header__submenu {
   position: absolute;
-  top: 82px;
+  top: 100%;
   right: 0;
   background-color: var(--bg-color-secondary);
   padding: 24px 32px;

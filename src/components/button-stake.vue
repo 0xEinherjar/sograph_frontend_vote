@@ -22,7 +22,7 @@ const { isSuccess } = useWaitForTransactionReceipt({
   hash: data,
 });
 watch(isSuccess, async (newIsSuccess) => {
-  if (newIsSuccess) event("stake");
+  if (newIsSuccess) event("stake", props.amount);
 });
 </script>
 <!-- prettier-ignore -->
