@@ -35,15 +35,5 @@ export const usePrepare = () => {
     return processProfileData(data, metadata);
   }
 
-  async function profileToCaller(data) {
-    const metadata = await fetchAndValidateMetadata(data.metadata);
-    if (!metadata) return null;
-    const profile = processProfileData(data, metadata);
-    return Object.assign(profile, {
-      isFollowing: data.isFollowing,
-      isFollower: data.isFollower,
-    });
-  }
-
-  return { profile, profileToCaller };
+  return { profile };
 };
