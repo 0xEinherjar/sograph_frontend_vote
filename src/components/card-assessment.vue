@@ -1,12 +1,19 @@
 <script setup>
 import { Avatar, ButtonExecute } from "./";
 import { useUtils } from "../composables/utils.js";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useModeratorStore } from "../store/moderator.js";
 import { storeToRefs } from "pinia";
 import { useWriteContract } from "@wagmi/vue";
 import { abi, contract } from "../contracts/Voting.js";
+import { useErrorStore } from "../store/error.js";
 
+const errorStore = useErrorStore();
+const { writeContractAsync, error } = useWriteContract();
+const { isAddress, truncateAddress, copyContent } = useUtils();
+const moderatorStore = useModeratorStore();
+const { moderator } = storeToRefs(moderatorStore);
+const executedAssessment = ref(null);
 const props = defineProps([
   "reason",
   "proposer",
@@ -20,11 +27,6 @@ const props = defineProps([
   "profileName",
   "profileHandle",
 ]);
-const { writeContractAsync } = useWriteContract();
-const { isAddress, truncateAddress, copyContent } = useUtils();
-const moderatorStore = useModeratorStore();
-const { moderator } = storeToRefs(moderatorStore);
-const executedAssessment = ref(null);
 
 function selectVote(event) {
   document
@@ -75,22 +77,23 @@ async function vote() {
   const voteMap = { For: 1, Against: 2, Abstain: 3 };
   const voteTarget = voteMap[selectedOption.innerText] || 0;
   if (voteTarget !== 0) {
-    try {
-      await writeContractAsync({
-        abi: abi,
-        address: contract,
-        functionName: "vote",
-        args: [props.id, voteTarget],
-      });
-    } catch (error) {
-      console.error("Error while voting:", error);
-    }
+    await writeContractAsync({
+      abi: abi,
+      address: contract,
+      functionName: "vote",
+      args: [props.id, voteTarget],
+    });
   }
 }
 
 async function executed() {
   executedAssessment.value = true;
 }
+watch(error, (newError) => {
+  if (newError) {
+    errorStore.setError(newError);
+  }
+});
 onMounted(() => {
   executedAssessment.value = props.executed;
 });

@@ -3,7 +3,9 @@ import { computed, onMounted, ref, watch } from "vue";
 import { Loading } from "./";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
 import { abi, contract } from "../contracts/Voting.js";
-const { writeContractAsync, data } = useWriteContract();
+import { useErrorStore } from "../store/error.js";
+const errorStore = useErrorStore();
+const { writeContractAsync, data, error } = useWriteContract();
 const props = defineProps(["profile", "classButton"]);
 const show = ref(false);
 const isLoading = ref(false);
@@ -25,19 +27,21 @@ function togglePlaceholder(event) {
 }
 async function create() {
   isLoading.value = true;
-  try {
-    await writeContractAsync({
-      abi: abi,
-      address: contract,
-      functionName: "createAssessment",
-      args: [form.value.profile, form.value.reason],
-    });
-  } catch (error) {
-    isLoading.value = false;
-  }
+  await writeContractAsync({
+    abi: abi,
+    address: contract,
+    functionName: "createAssessment",
+    args: [form.value.profile, form.value.reason],
+  });
 }
 const { isSuccess } = useWaitForTransactionReceipt({
   hash: data,
+});
+watch(error, (newError) => {
+  if (newError) {
+    errorStore.setError(newError);
+    isLoading.value = false;
+  }
 });
 watch(isSuccess, async (newIsSuccess) => {
   if (newIsSuccess) {

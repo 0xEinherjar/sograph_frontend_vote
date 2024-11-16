@@ -3,10 +3,15 @@ import { storeToRefs } from "pinia";
 import { useModeratorStore } from "../store/moderator.js";
 import { useAccount, useDisconnect } from "@wagmi/vue";
 import { Avatar, Logo, CreateProposal, ModalConnect } from "./";
-const { moderator } = storeToRefs(useModeratorStore());
+const moderatorStore = useModeratorStore();
+const { moderator } = storeToRefs(moderatorStore);
 
 const { isConnected } = useAccount();
 const { disconnect } = useDisconnect();
+function logout() {
+  disconnect();
+  moderatorStore.resetModerator();
+}
 </script>
 <!-- prettier-ignore -->
 <template>
@@ -30,7 +35,7 @@ const { disconnect } = useDisconnect();
         <div class="header__submenu header__submenu--vote">
           <ul class="header__submenu-list">
             <li class="header__submenu-item">
-              <button @click="disconnect()" type="button">Logout</button>
+              <button @click="logout" type="button">Logout</button>
             </li>
           </ul>
         </div>

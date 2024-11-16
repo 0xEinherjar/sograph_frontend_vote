@@ -7,37 +7,26 @@ export const useModeratorStore = defineStore("moderator", () => {
     isActive: false,
     wallet: null,
     balance: null,
+    participation: 0,
     totalToken: 0,
   });
 
   if (localStorage.getItem("moderator")) {
     moderator.value = JSON.parse(localStorage.getItem("moderator"));
   }
-  function setConnected() {
+  function setData(data) {
     moderator.value.isConnected = true;
+    moderator.value.isActive = data.active;
+    moderator.value.wallet = data.wallet;
+    moderator.value.balance = data.balance;
+    moderator.value.participation = data.participation;
     localStorage.setItem("moderator", JSON.stringify(moderator.value));
   }
-  function setWallet(wallet) {
-    moderator.value.wallet = wallet;
-    localStorage.setItem("moderator", JSON.stringify(moderator.value));
-  }
-  function setBalance(balance) {
-    moderator.value.balance = balance;
-    localStorage.setItem("moderator", JSON.stringify(moderator.value));
-  }
-  function setTotalToken(total) {
-    moderator.value.totalToken = total;
-    localStorage.setItem("moderator", JSON.stringify(moderator.value));
-  }
-  function setActive(isActive) {
-    moderator.value.isActive = isActive;
-    localStorage.setItem("moderator", JSON.stringify(moderator.value));
-  }
-
   function resetModerator() {
     moderator.value.isConnected = false;
     moderator.value.isActive = false;
     moderator.value.wallet = null;
+    moderator.value.participation = null;
     moderator.value.balance = null;
     moderator.value.totalToken = null;
     localStorage.removeItem("moderator");
@@ -45,11 +34,7 @@ export const useModeratorStore = defineStore("moderator", () => {
 
   return {
     moderator,
-    setConnected,
-    setBalance,
-    setTotalToken,
-    setWallet,
+    setData,
     resetModerator,
-    setActive,
   };
 });

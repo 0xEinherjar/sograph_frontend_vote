@@ -106,6 +106,9 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.u-margin-auto {
+  margin-inline: auto;
+}
 .u-flex-line,
 .u-flex-line-center,
 .u-flex-line-between {

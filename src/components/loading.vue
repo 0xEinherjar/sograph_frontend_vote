@@ -1,9 +1,15 @@
 <script setup>
-const { type } = defineProps(["type"]);
+const { type, theme } = defineProps(["type", "theme"]);
 </script>
 <!-- prettier-ignore -->
 <template>
-  <div class="c-loader" :class="{'c-loader--small': type == 'small','c-loader--medium': type == 'medium'}"></div>
+  <div class="c-loader u-margin-auto"
+    :class="{
+      'c-loader--small': type == 'small',
+      'c-loader--medium': type == 'medium',
+      'c-loader--dark': theme == 'dark',
+    }"
+  ></div>
 </template>
 <style>
 .c-loader {
@@ -13,7 +19,6 @@ const { type } = defineProps(["type"]);
   border-color: rgba(244, 244, 244, 0.3);
   border-top-color: #f4f4f4;
   animation: spin 1s ease-in-out infinite;
-  margin-inline: auto;
   -webkit-animation: spin 1s ease-in-out infinite;
 }
 .c-loader--small {
@@ -25,6 +30,10 @@ const { type } = defineProps(["type"]);
   height: 24px;
   width: 24px;
   border-width: 3px;
+}
+.c-loader--dark {
+  border-color: rgba(40, 41, 43, 0.3);
+  border-top-color: #28292b;
 }
 
 @keyframes spin {

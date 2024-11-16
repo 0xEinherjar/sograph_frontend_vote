@@ -2,30 +2,42 @@
 import { watch } from "vue";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
 import { abi, contract } from "../contracts/Voting.js";
+import { Loading } from "./";
+import { useErrorStore } from "../store/error.js";
 const props = defineProps(["id"]);
 const event = defineEmits(["executed"]);
-const { writeContractAsync, data } = useWriteContract();
+const { writeContractAsync, data, error } = useWriteContract();
+const errorStore = useErrorStore();
 
 async function execute() {
-  try {
-    await writeContractAsync({
-      abi: abi,
-      address: contract,
-      functionName: "executeAssessment",
-      args: [props.id],
-    });
-  } catch (error) {
-    console.error("Error executing assessment:", error);
-  }
+  isLoading.value = true;
+  await writeContractAsync({
+    abi: abi,
+    address: contract,
+    functionName: "executeAssessment",
+    args: [props.id],
+  });
 }
 const { isSuccess } = useWaitForTransactionReceipt({
   hash: data,
 });
 watch(isSuccess, async (newIsSuccess) => {
-  if (newIsSuccess) event("executed");
+  if (newIsSuccess) {
+    event("executed");
+    isLoading.value = false;
+  }
+});
+watch(error, (newError) => {
+  if (newError) {
+    errorStore.setError(newError);
+    isLoading.value = false;
+  }
 });
 </script>
 <!-- prettier-ignore -->
 <template>
-<button @click="execute" class="assessment__card-button-execute">Execute</button>
+<button @click="execute" class="assessment__card-button-execute">
+  <template v-if="!isLoading">Execute</template>
+  <loading v-else type="small" theme="dark"/>
+</button>
 </template>

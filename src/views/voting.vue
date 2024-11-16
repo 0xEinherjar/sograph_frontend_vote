@@ -44,7 +44,7 @@ onBeforeMount(async () => {
               /> 
             </template>
           </template>
-          <div v-else class="u-text-center">No proposals have been made yet.</div>
+          <div v-else class="u-text-center">No assessment has been created yet.</div>
         </template>
       </div>
     </div>

@@ -4,22 +4,23 @@ import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
 import { abi, contract } from "../contracts/Voting.js";
 import { useErrorStore } from "../store/error.js";
 import { Loading } from "./";
-const props = defineProps(["amount"]);
-const event = defineEmits(["stake"]);
+const props = defineProps(["amount", "decimals"]);
+const event = defineEmits(["withdraw"]);
 const { writeContractAsync, data, error } = useWriteContract();
 const isLoading = ref(false);
 const errorStore = useErrorStore();
 
-async function stake() {
+async function withdraw() {
   isLoading.value = true;
+  const amount = props.amount * 10 ** props.decimals;
   await writeContractAsync({
     abi: abi,
     address: contract,
-    functionName: "stake",
-    args: [props.amount],
+    functionName: "withdraw",
+    args: [amount],
   });
 }
-const { isSuccess, isError } = useWaitForTransactionReceipt({
+const { isSuccess } = useWaitForTransactionReceipt({
   hash: data,
 });
 watch(error, (newError) => {
@@ -31,14 +32,14 @@ watch(error, (newError) => {
 watch(isSuccess, async (newIsSuccess) => {
   if (newIsSuccess) {
     isLoading.value = false;
-    event("stake", props.amount);
+    event("withdraw", props.amount);
   }
 });
 </script>
 <!-- prettier-ignore -->
 <template>
-  <button @click="stake" class="c-panel__button c-panel__button-primary u-flex-line-center">
-    <template v-if="!isLoading">Stake</template>
+  <button @click="withdraw" class="c-panel__button c-panel__button-primary u-flex-line-center">
+    <template v-if="!isLoading">Withdraw</template>
     <loading v-else type="small" theme="dark"/>
   </button>
 </template>

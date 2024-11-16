@@ -1,75 +1,70 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
 import { storeToRefs } from "pinia";
-import { useReadTokenContract } from "../composables/useReadTokenContract.js";
-import { useReadVotingContract } from "../composables/useReadVotingContract.js";
 import { useUtils } from "../composables/utils.js";
 import { useModeratorStore } from "../store/moderator.js";
 import { abi, contract } from "../contracts/Token.js";
-import { ButtonStake } from "./";
+import { ButtonStake, Loading, ButtonWithdraw } from "./";
 import { contract as contractVoting } from "../contracts/Voting.js";
+import { usePanelInfo } from "../composables/usePanelInfo.js";
 const moderatorStore = useModeratorStore();
 const { moderator } = storeToRefs(moderatorStore);
-const { readTokenContract } = useReadTokenContract();
-const { readVotingContract } = useReadVotingContract();
 const { writeContractAsync, data } = useWriteContract();
 const { toNumber } = useUtils();
+const { getPanelInfo } = usePanelInfo();
 const select = ref("Stake");
 const amountVote = ref();
-const minParticipation = ref(0);
-const minParticipationDisplay = ref(0);
-const decimals = ref(0);
 const amount = ref(0);
+const isLoading = ref(false);
+const info = ref({
+  decimals: 0,
+  currency: "",
+  minParticipation: 0,
+  minParticipationFormated: 0,
+});
 function panelSelect(param) {
   select.value = param;
 }
 function max() {
   if (!moderator.value.isConnected) return;
-  if (select.value == "Stake") {
-    amountVote.value =
-      moderator.value.totalToken / 10 ** Number(decimals.value);
-  } else {
-    amountVote.value = moderator.value.balance;
-  }
+  if (select.value == "Stake") amountVote.value = moderator.value.balance;
+  else amountVote.value = moderator.value.participation;
 }
 
-async function approve(amount) {
+function stakeEvent(amount) {
+  moderatorStore.setData(
+    Object.assign(moderator.value, {
+      participation:
+        moderator.value.participation + amount / 10 ** info.value.decimals,
+      active: true,
+    })
+  );
+}
+
+async function handleAction() {
+  amount.value = amountVote.value
+    ? amountVote.value * 10 ** info.value.decimals
+    : 0;
+  if (amount.value < toNumber(info.value.minParticipation)) return;
+  isLoading.value = true;
   await writeContractAsync({
     abi: abi,
     address: contract,
     functionName: "approve",
-    args: [contractVoting, amount],
+    args: [contractVoting, amount.value],
   });
-}
-
-function stakeEvent(amount) {
-  moderatorStore.setActive(true);
-  moderatorStore.setBalance(moderator.value.balance + amount);
-}
-
-async function handleAction() {
-  amount.value = amountVote.value * 10 ** decimals.value;
-  if (select.value == "Stake") {
-    if (amount.value < toNumber(minParticipation.value)) return;
-    await approve(amount.value);
-  } else {
-    await writeContractAsync({
-      abi: abiVoting,
-      address: contractVoting,
-      functionName: "withdraw",
-      args: [BigInt(amount)],
-    });
-  }
 }
 const { isSuccess } = useWaitForTransactionReceipt({
   hash: data,
 });
+watch(isSuccess, async (newIsSuccess) => {
+  if (newIsSuccess) isLoading.value = false;
+});
 onMounted(async () => {
-  minParticipation.value = await readVotingContract("minParticipation");
-  decimals.value = await readTokenContract("decimals");
-  minParticipationDisplay.value =
-    Number(minParticipation.value) / 10 ** Number(decimals.value);
+  const result = await getPanelInfo();
+  if (!result) return;
+  Object.assign(info.value, result);
 });
 </script>
 <!-- prettier-ignore -->
@@ -79,10 +74,10 @@ onMounted(async () => {
       <div class="c-panel__text c-panel__text--fluid">Account balance</div>
       <div class="c-panel__text">
         <template v-if="moderator.isConnected">
-          {{ Number(moderator.balance)/10**Number(decimals) }}
+          {{ moderator.participation }}
         </template>
         <template v-else>0</template>
-        <span class="c-panel__text-secondary"> Graph</span>
+        <span class="c-panel__text-secondary">{{ info.currency }}</span>
       </div>
     </div>
     <div class="c-panel__select">
@@ -99,13 +94,24 @@ onMounted(async () => {
       </div>
     </div>
     <div class="c-panel__field u-flex-line">
-      <input v-if="select=='Stake'" class="c-panel__field-input" type="text" v-model="amountVote" :placeholder="`Minimum of ${minParticipationDisplay} Graph`">
+      <input v-if="select=='Stake'" class="c-panel__field-input" type="text" v-model="amountVote" :placeholder="`Minimum of ${info.minParticipationFormated} ${info.currency}`">
       <input v-else class="c-panel__field-input" type="text" v-model="amountVote" placeholder="0">
       <button class="c-panel__field-button" type="button" @click="max">Max</button>
-    </div>
+    </div> 
     <template v-if="moderator.isConnected">
-      <button v-if="!isSuccess" @click="handleAction" class="c-panel__button c-panel__button-primary" type="button">Approve</button>
-      <button-stake v-else @stake="stakeEvent" :amount="amount"/>
+      <button v-if="moderator.balance < info.minParticipationFormated" class="c-panel__button c-panel__button-primary u-flex-line-center" type="button">
+        Not enough balance
+      </button>
+      <template v-else>
+        <template v-if="select == 'Stake'">
+          <button v-if="!isSuccess" @click="handleAction" class="c-panel__button c-panel__button-primary u-flex-line-center" type="button">
+            <template v-if="!isLoading">Approve</template>
+            <loading v-else type="small" theme="dark"/>
+          </button>
+          <button-stake v-else @stake="stakeEvent" :amount="amount"/>
+        </template>
+        <button-withdraw v-else :amount="amountVote" :decimals="info.decimals"/>
+      </template>
     </template>
     <button v-else class="c-panel__button c-panel__button-primary" type="button">Connect</button>
     <span class="c-panel__line"></span>
@@ -205,6 +211,7 @@ onMounted(async () => {
   text-transform: uppercase;
   color: #e8eaed;
   opacity: 0.6;
+  margin-left: 4px;
 }
 .c-panel__text--fluid {
   flex-grow: 1;

@@ -1,25 +1,18 @@
 <script setup>
 import { useAccountEffect } from "@wagmi/vue";
 import { useModeratorStore } from "./store/moderator";
-import { useReadVotingContract } from "./composables/useReadVotingContract.js";
-import { useReadTokenContract } from "./composables/useReadTokenContract.js";
-import { useUtils } from "./composables/utils.js";
-const { readVotingContract } = useReadVotingContract();
-const { readTokenContract } = useReadTokenContract();
+import { Toast } from "./components/";
+import { storeToRefs } from "pinia";
+import { useErrorStore } from "./store/error.js";
+import { useParticipantInfo } from "./composables/useParticipantInfo.js";
+const errorStore = useErrorStore();
+const { error } = storeToRefs(errorStore);
 const moderatorStore = useModeratorStore();
-const { toNumber } = useUtils();
-
+const { getParticipantInfo } = useParticipantInfo();
 useAccountEffect({
   async onConnect(data) {
-    const participant = await readVotingContract("participants", [
-      data.address,
-    ]);
-    moderatorStore.setActive(participant[0]);
-    moderatorStore.setBalance(toNumber(participant[1]));
-    moderatorStore.setWallet(data.address);
-    moderatorStore.setConnected();
-    const totalToken = await readTokenContract("balanceOf", [data.address]);
-    moderatorStore.setTotalToken(toNumber(totalToken));
+    const result = await getParticipantInfo(data.address);
+    moderatorStore.setData(Object.assign(result, { wallet: data.address }));
   },
   onDisconnect() {
     moderatorStore.resetModerator();
@@ -28,6 +21,7 @@ useAccountEffect({
 </script>
 <!-- prettier-ignore -->
 <template>
+  <toast v-if="error"/>
   <router-view></router-view>
 </template>
 <style></style>
