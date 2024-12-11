@@ -10,8 +10,8 @@ export const constants = {
     InsufficientParticipation:
       "Insufficient participation for this withdrawal.",
     WithdrawalNotAuthorizedYet: "Withdrawal not authorized yet.",
-    UserMustBeReportedAtLeastOnce:
-      "User must be reported at least once before assessment.",
+    NotEnoughReports:
+      "User must be reported at least 10 times to be under assessment.",
     NotActiveParticipant: "Participant is not active.",
     UserRecentlyReestablished:
       "User has been recently reestablished and is in grace period.",
