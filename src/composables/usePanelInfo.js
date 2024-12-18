@@ -21,15 +21,15 @@ export const usePanelInfo = () => {
           functionName: "decimals",
         },
         {
-          abi: tokenAbi,
-          address: tokenContract,
-          functionName: "name",
-        },
-        {
           abi: votingAbi,
           address: votingContract,
           functionName: "minParticipation",
         },
+        // {
+        //   abi: tokenAbi,
+        //   address: tokenContract,
+        //   functionName: "name",
+        // },
       ],
     });
     for (const result of results) {
@@ -37,10 +37,10 @@ export const usePanelInfo = () => {
     }
     return {
       decimals: results[0].result,
-      currency: results[1].result,
-      minParticipation: toNumber(results[2].result),
+      currency: "Bitcoin BEP20",
+      minParticipation: toNumber(results[1].result),
       minParticipationFormated:
-        toNumber(results[2].result) / 10 ** results[0].result,
+        toNumber(results[1].result) / 10 ** results[0].result,
     };
   }
   return { getPanelInfo };

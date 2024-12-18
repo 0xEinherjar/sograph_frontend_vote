@@ -43,9 +43,8 @@ function stakeEvent(amount) {
 }
 
 async function handleAction() {
-  amount.value = amountVote.value
-    ? amountVote.value * 10 ** info.value.decimals
-    : 0;
+  if (amountVote.value == 0) return;
+  amount.value = amountVote.value * 10 ** info.value.decimals;
   if (amount.value < toNumber(info.value.minParticipation)) return;
   isLoading.value = true;
   await writeContractAsync({
@@ -208,7 +207,7 @@ onMounted(async () => {
   color: #f4f4f4;
 }
 .c-panel__text-secondary {
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   color: #e8eaed;
   opacity: 0.6;
   margin-left: 4px;
