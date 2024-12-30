@@ -5,13 +5,15 @@ import { storeToRefs } from "pinia";
 import { useUtils } from "../composables/utils.js";
 import { useModeratorStore } from "../store/moderator.js";
 import { abi, contract } from "../contracts/Token.js";
-import { ButtonStake, Loading, ButtonWithdraw } from "./";
-import { contract as contractVoting } from "../contracts/Voting.js";
+import { ButtonStake, Loading, ButtonWithdraw, ButtonReward } from "./";
+import { contract as contractVoting } from "../contracts/ProfileGovernance.js";
 import { usePanelInfo } from "../composables/usePanelInfo.js";
+import { useReadProfileGovernanceContract } from "../composables/useReadProfileGovernanceContract.js";
+const { readProfileGovernanceContract } = useReadProfileGovernanceContract();
 const moderatorStore = useModeratorStore();
 const { moderator } = storeToRefs(moderatorStore);
 const { writeContractAsync, data } = useWriteContract();
-const { toNumber } = useUtils();
+const { toNumber, valueDisplay } = useUtils();
 const { getPanelInfo } = usePanelInfo();
 const select = ref("Stake");
 const amountVote = ref();
@@ -54,16 +56,26 @@ async function handleAction() {
     args: [contractVoting, amount.value],
   });
 }
+
 const { isSuccess } = useWaitForTransactionReceipt({
   hash: data,
 });
+
 watch(isSuccess, async (newIsSuccess) => {
   if (newIsSuccess) isLoading.value = false;
 });
+
 onMounted(async () => {
   const result = await getPanelInfo();
   if (!result) return;
   Object.assign(info.value, result);
+  if (moderator.value.isConnected) {
+    const result = await readProfileGovernanceContract(
+      "getTotalEarnedRewards",
+      [moderator.value.wallet]
+    );
+    moderatorStore.setReward(toNumber(result));
+  }
 });
 </script>
 <!-- prettier-ignore -->
@@ -114,7 +126,7 @@ onMounted(async () => {
     </template>
     <button v-else class="c-panel__button c-panel__button-primary" type="button">Connect</button>
     <span class="c-panel__line"></span>
-    <button class="c-panel__button c-panel__button-primary c-soon" type="button">Claim Rewards</button>
+    <button-reward/>
     <button v-if="moderator.isActive && moderator.isConnected" class="c-panel__button c-panel__button-active" type="button">Active</button>
     <button v-else class="c-panel__button c-panel__button-no-active" type="button">No active</button>
   </div>
@@ -165,10 +177,6 @@ onMounted(async () => {
 .c-panel__button-primary {
   background-color: #f4f4f4;
   color: #28292b;
-}
-.c-panel__button-primary.c-soon::before {
-  top: 10px;
-  right: 29%;
 }
 .c-panel__line {
   height: 1px;

@@ -13,3 +13,4 @@ export { default as ModalConnect } from "./modal-connect.vue";
 export { default as ButtonExecute } from "./button-execute.vue";
 export { default as ButtonStake } from "./button-stake.vue";
 export { default as ButtonWithdraw } from "./button-withdraw.vue";
+export { default as ButtonReward } from "./button-reward.vue";

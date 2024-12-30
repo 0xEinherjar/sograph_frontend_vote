@@ -5,7 +5,7 @@ import {
 import {
   abi as votingAbi,
   contract as votingContract,
-} from "../contracts/Voting.js";
+} from "../contracts/ProfileGovernance.js";
 import { usePublicClient } from "./usePublicClient.js";
 import { useUtils } from "./utils.js";
 const { client } = usePublicClient();
@@ -32,16 +32,22 @@ export const useParticipantInfo = () => {
           address: tokenContract,
           functionName: "decimals",
         },
+        {
+          abi: votingAbi,
+          address: votingContract,
+          functionName: "getTotalEarnedRewards",
+          args: [address],
+        },
       ],
     });
     for (const result of results) {
       if (result.status == "failure") return null;
     }
-
     return {
       active: results[0].result[0],
-      participation: toNumber(results[0].result[1]) / 10 ** results[2].result,
+      participation: toNumber(results[0].result[3]) / 10 ** results[2].result,
       balance: toNumber(results[1].result) / 10 ** results[2].result,
+      rewards: toNumber(results[3].result),
     };
   }
   return { getParticipantInfo };

@@ -5,7 +5,7 @@ import {
 import {
   abi as votingAbi,
   contract as votingContract,
-} from "../contracts/Voting.js";
+} from "../contracts/ProfileGovernance.js";
 import { usePublicClient } from "./usePublicClient.js";
 import { useUtils } from "./utils.js";
 const { client } = usePublicClient();
@@ -23,7 +23,7 @@ export const usePanelInfo = () => {
         {
           abi: votingAbi,
           address: votingContract,
-          functionName: "minParticipation",
+          functionName: "minimumStakeAmount",
         },
         // {
         //   abi: tokenAbi,

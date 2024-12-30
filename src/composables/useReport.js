@@ -1,16 +1,16 @@
 import { useUtils } from "./utils";
-import { useReadVotingContract } from "./useReadVotingContract.js";
+import { useReadUserReportManagerContract } from "./useReadUserReportManagerContract.js";
 import { BaseError, ContractFunctionRevertedError } from "viem";
 const { toNumber } = useUtils();
-const { readVotingContract } = useReadVotingContract();
+const { readUserReportManagerContract } = useReadUserReportManagerContract();
 
 export const useReport = () => {
   async function getReport(cursor, size) {
     try {
-      const [reported, newCursor] = await readVotingContract("getReports", [
-        cursor,
-        size,
-      ]);
+      const [reported, newCursor] = await readUserReportManagerContract(
+        "getReports",
+        [cursor, size]
+      );
       if (reported.length == 0) return { success: true, data: [], cursor: 0 };
       const data = [];
       for (const item of reported) {

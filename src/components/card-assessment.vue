@@ -5,7 +5,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useModeratorStore } from "../store/moderator.js";
 import { storeToRefs } from "pinia";
 import { useWriteContract } from "@wagmi/vue";
-import { abi, contract } from "../contracts/Voting.js";
+import { abi, contract } from "../contracts/ProfileGovernance.js";
 import { useErrorStore } from "../store/error.js";
 
 const errorStore = useErrorStore();
@@ -80,7 +80,7 @@ async function vote() {
     await writeContractAsync({
       abi: abi,
       address: contract,
-      functionName: "vote",
+      functionName: "castVote",
       args: [props.id, voteTarget],
     });
   }

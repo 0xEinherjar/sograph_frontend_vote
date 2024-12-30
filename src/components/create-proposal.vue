@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { Loading } from "./";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
-import { abi, contract } from "../contracts/Voting.js";
+import { abi, contract } from "../contracts/ProfileGovernance.js";
 import { useErrorStore } from "../store/error.js";
 const errorStore = useErrorStore();
 const { writeContractAsync, data, error } = useWriteContract();

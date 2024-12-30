@@ -4,22 +4,26 @@ import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
 import { abi, contract } from "../contracts/ProfileGovernance.js";
 import { useErrorStore } from "../store/error.js";
 import { Loading } from "./";
-const props = defineProps(["amount"]);
-const event = defineEmits(["stake"]);
+import { useModeratorStore } from "../store/moderator.js";
+import { storeToRefs } from "pinia";
+import { useUtils } from "../composables/utils.js";
+const { valueDisplay } = useUtils();
+const moderatorStore = useModeratorStore();
+const { moderator } = storeToRefs(moderatorStore);
 const { writeContractAsync, data, error } = useWriteContract();
 const isLoading = ref(false);
 const errorStore = useErrorStore();
 
-async function stake() {
+async function claim() {
+  if (!moderator.value.isConnected || !moderator.value.rewards) return;
   isLoading.value = true;
   await writeContractAsync({
     abi: abi,
     address: contract,
-    functionName: "stake",
-    args: [props.amount],
+    functionName: "claim",
   });
 }
-const { isSuccess, isError } = useWaitForTransactionReceipt({
+const { isSuccess } = useWaitForTransactionReceipt({
   hash: data,
 });
 watch(error, (newError) => {
@@ -31,14 +35,14 @@ watch(error, (newError) => {
 watch(isSuccess, async (newIsSuccess) => {
   if (newIsSuccess) {
     isLoading.value = false;
-    event("stake", props.amount);
+    moderatorStore.setReward(0);
   }
 });
 </script>
 <!-- prettier-ignore -->
 <template>
-  <button @click="stake" class="c-panel__button c-panel__button-primary u-flex-line-center">
-    <template v-if="!isLoading">Stake</template>
+  <button @click="claim" class="c-panel__button c-panel__button-primary" type="button">
+    <template v-if="!isLoading">Claim Rewards <template v-if="moderator.rewards > 0">({{ valueDisplay(moderator.rewards) }} BTC.B)</template></template>
     <loading v-else type="small" theme="dark"/>
   </button>
 </template>

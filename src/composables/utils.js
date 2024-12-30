@@ -60,11 +60,17 @@ export const useUtils = () => {
     return true;
   }
 
+  function valueDisplay(value, decimals = 18) {
+    if (!value) return 0;
+    return value / 10 ** decimals;
+  }
+
   return {
     truncateAddress,
     toNumber,
     dateFormat,
     copyContent,
     isAddress,
+    valueDisplay,
   };
 };

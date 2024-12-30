@@ -1,14 +1,16 @@
 import { useUtils } from "./utils";
-import { useReadVotingContract } from "./useReadVotingContract.js";
+import { useReadProfileGovernanceContract } from "./useReadProfileGovernanceContract.js";
 import { BaseError, ContractFunctionRevertedError } from "viem";
 import { useProfile } from "./useProfile.js";
 const { toNumber } = useUtils();
-const { readVotingContract } = useReadVotingContract();
+const { readProfileGovernanceContract } = useReadProfileGovernanceContract();
 const { getProfile } = useProfile();
 export const useAssessment = () => {
   async function getAssessment() {
     try {
-      const assessments = await readVotingContract("fetchAllAssessment");
+      const assessments = await readProfileGovernanceContract(
+        "fetchAllAssessment"
+      );
       if (assessments.length == 0) return { data: [], success: true };
       const data = [];
       for (const assessment of assessments) {

@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { Heading, CardReport, CardReportPlaceholder } from "../components/";
-import { useReport } from "../composables/useReport";
-import { useProfile } from "../composables/useProfile";
+import { useReport } from "../composables/useReport.js";
+import { useProfile } from "../composables/useProfile.js";
 const reported = ref([]);
 const lengthPag = ref(20);
 const cursorPag = ref(0);

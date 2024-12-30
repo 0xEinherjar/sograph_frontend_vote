@@ -9,6 +9,7 @@ export const useModeratorStore = defineStore("moderator", () => {
     balance: null,
     participation: 0,
     totalToken: 0,
+    rewards: 0,
   });
 
   if (localStorage.getItem("moderator")) {
@@ -20,6 +21,11 @@ export const useModeratorStore = defineStore("moderator", () => {
     moderator.value.wallet = data.wallet;
     moderator.value.balance = data.balance;
     moderator.value.participation = data.participation;
+    moderator.value.rewards = data.rewards;
+    localStorage.setItem("moderator", JSON.stringify(moderator.value));
+  }
+  function setReward(data) {
+    moderator.value.rewards = data;
     localStorage.setItem("moderator", JSON.stringify(moderator.value));
   }
   function resetModerator() {
@@ -36,5 +42,6 @@ export const useModeratorStore = defineStore("moderator", () => {
     moderator,
     setData,
     resetModerator,
+    setReward,
   };
 });

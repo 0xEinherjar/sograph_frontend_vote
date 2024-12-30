@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
-import { abi, contract } from "../contracts/Voting.js";
+import { abi, contract } from "../contracts/ProfileGovernance.js";
 import { useErrorStore } from "../store/error.js";
 import { Loading } from "./";
 const props = defineProps(["amount", "decimals"]);
@@ -10,13 +10,13 @@ const { writeContractAsync, data, error } = useWriteContract();
 const isLoading = ref(false);
 const errorStore = useErrorStore();
 
-async function withdraw() {
+async function unstake() {
   isLoading.value = true;
   const amount = props.amount * 10 ** props.decimals;
   await writeContractAsync({
     abi: abi,
     address: contract,
-    functionName: "withdraw",
+    functionName: "unstake",
     args: [amount],
   });
 }
@@ -38,7 +38,7 @@ watch(isSuccess, async (newIsSuccess) => {
 </script>
 <!-- prettier-ignore -->
 <template>
-  <button @click="withdraw" class="c-panel__button c-panel__button-primary u-flex-line-center">
+  <button @click="unstake" class="c-panel__button c-panel__button-primary u-flex-line-center">
     <template v-if="!isLoading">Withdraw</template>
     <loading v-else type="small" theme="dark"/>
   </button>

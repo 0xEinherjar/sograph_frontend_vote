@@ -1,9 +1,9 @@
-import { abi, contract } from "../contracts/Voting.js";
+import { abi, contract } from "../contracts/UserReportManager.js";
 import { usePublicClient } from "./usePublicClient.js";
 const { client } = usePublicClient();
 
-export const useReadVotingContract = () => {
-  async function readVotingContract(functionName, args = []) {
+export const useReadUserReportManagerContract = () => {
+  async function readUserReportManagerContract(functionName, args = []) {
     return await client.readContract({
       abi: abi,
       address: contract,
@@ -13,6 +13,6 @@ export const useReadVotingContract = () => {
   }
 
   return {
-    readVotingContract,
+    readUserReportManagerContract,
   };
 };

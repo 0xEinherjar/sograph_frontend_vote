@@ -1,7 +1,7 @@
 <script setup>
 import { watch } from "vue";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
-import { abi, contract } from "../contracts/Voting.js";
+import { abi, contract } from "../contracts/ProfileGovernance.js";
 import { Loading } from "./";
 import { useErrorStore } from "../store/error.js";
 const props = defineProps(["id"]);
@@ -14,7 +14,7 @@ async function execute() {
   await writeContractAsync({
     abi: abi,
     address: contract,
-    functionName: "executeAssessment",
+    functionName: "finalizeAssessment",
     args: [props.id],
   });
 }
