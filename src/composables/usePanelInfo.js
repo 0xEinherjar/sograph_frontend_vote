@@ -37,7 +37,7 @@ export const usePanelInfo = () => {
     }
     return {
       decimals: results[0].result,
-      currency: "Bitcoin BEP20",
+      currency: "Wrapped Bitcoin",
       minParticipation: toNumber(results[1].result),
       minParticipationFormated:
         toNumber(results[1].result) / 10 ** results[0].result,

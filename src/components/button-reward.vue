@@ -42,7 +42,7 @@ watch(isSuccess, async (newIsSuccess) => {
 <!-- prettier-ignore -->
 <template>
   <button @click="claim" class="c-panel__button c-panel__button-primary" type="button">
-    <template v-if="!isLoading">Claim Rewards <template v-if="moderator.rewards > 0">({{ valueDisplay(moderator.rewards) }} BTC.B)</template></template>
+    <template v-if="!isLoading">Claim Rewards <template v-if="moderator.rewards > 0">({{ valueDisplay(moderator.rewards) }} WBTC)</template></template>
     <loading v-else type="small" theme="dark"/>
   </button>
 </template>

@@ -1,9 +1,10 @@
 import { createPublicClient, http } from "viem";
-import { bscTestnet } from "viem/chains";
+import { useChain } from "./useChain.js";
 
+const { monadTestnet } = useChain();
 export const usePublicClient = () => {
   const client = createPublicClient({
-    chain: bscTestnet,
+    chain: monadTestnet,
     transport: http(),
   });
 
