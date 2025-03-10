@@ -16,7 +16,7 @@ const monadTestnet = defineChain({
   rpcUrls: {
     default: {
       http: [
-        "https://special-special-telescope.base-sepolia.quiknode.pro/0c45fdba0a2cb850c282df0417a217f67ea8fbc6",
+        "https://special-special-telescope.monad-testnet.quiknode.pro/0c45fdba0a2cb850c282df0417a217f67ea8fbc6",
       ],
     },
   },
@@ -30,7 +30,7 @@ export const config = createConfig({
   connectors: [metaMask(), binanceWallet(), coinbaseWallet()],
   transports: {
     [monadTestnet.id]: http(
-      "https://special-special-telescope.base-sepolia.quiknode.pro/0c45fdba0a2cb850c282df0417a217f67ea8fbc6"
+      "https://special-special-telescope.monad-testnet.quiknode.pro/0c45fdba0a2cb850c282df0417a217f67ea8fbc6"
     ),
   },
 });

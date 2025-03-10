@@ -1,53 +1,27 @@
-import {
-  abi as tokenAbi,
-  contract as tokenContract,
-} from "../contracts/Token.js";
-import {
-  abi as votingAbi,
-  contract as votingContract,
-} from "../contracts/ProfileGovernance.js";
-import { usePublicClient } from "./usePublicClient.js";
 import { useUtils } from "./utils.js";
-const { client } = usePublicClient();
+import { useReadProfileGovernanceContract } from "./useReadProfileGovernanceContract.js";
+import { useReadTokenContract } from "./useReadTokenContract.js";
+const { readProfileGovernanceContract } = useReadProfileGovernanceContract();
+const { readTokenContract } = useReadTokenContract();
 const { toNumber } = useUtils();
 
 export const useParticipantInfo = () => {
   async function getParticipantInfo(address) {
-    const results = await client.multicall({
-      contracts: [
-        {
-          abi: votingAbi,
-          address: votingContract,
-          functionName: "participants",
-          args: [address],
-        },
-        {
-          abi: tokenAbi,
-          address: tokenContract,
-          functionName: "balanceOf",
-          args: [address],
-        },
-        {
-          abi: tokenAbi,
-          address: tokenContract,
-          functionName: "decimals",
-        },
-        {
-          abi: votingAbi,
-          address: votingContract,
-          functionName: "getTotalEarnedRewards",
-          args: [address],
-        },
-      ],
-    });
-    for (const result of results) {
-      if (result.status == "failure") return null;
-    }
+    console.log("chamou");
+    const participant = await readProfileGovernanceContract("participants", [
+      address,
+    ]);
+    const totalEarnedRewards = await readProfileGovernanceContract(
+      "getTotalEarnedRewards",
+      [address]
+    );
+    const balanceOf = await readTokenContract("balanceOf", [address]);
+    const decimals = await readTokenContract("decimals");
     return {
-      active: results[0].result[0],
-      participation: toNumber(results[0].result[3]) / 10 ** results[2].result,
-      balance: toNumber(results[1].result) / 10 ** results[2].result,
-      rewards: toNumber(results[3].result),
+      active: participant[0],
+      participation: toNumber(participant[3]) / 10 ** decimals,
+      balance: toNumber(balanceOf) / 10 ** decimals,
+      rewards: toNumber(totalEarnedRewards),
     };
   }
   return { getParticipantInfo };
