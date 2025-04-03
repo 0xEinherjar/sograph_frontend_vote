@@ -51,7 +51,7 @@ const walletIcon = ref({
 }
 .c-connect__title {
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 15px;
 }
 .c-connect__wallets {
   display: grid;

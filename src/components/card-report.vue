@@ -34,7 +34,7 @@ const props = defineProps(["avatar", "name", "reasons", "link", "address"]);
   gap: 24px;
 }
 .c-report__name {
-  height: 1.9rem;
+  height: 19px;
   font-weight: 500;
   flex-grow: 1;
 }
@@ -42,7 +42,7 @@ const props = defineProps(["avatar", "name", "reasons", "link", "address"]);
   height: 32px;
   border-radius: 8px;
   padding-inline: 12px;
-  font-size: 1.2rem;
+  font-size: 12px;
   font-weight: 500;
   background-color: var(--bg-color-tertiary);
 }
@@ -52,7 +52,7 @@ const props = defineProps(["avatar", "name", "reasons", "link", "address"]);
   height: 40px;
   width: 100%;
   color: #1a1b1d;
-  font-size: 1.2rem;
+  font-size: 12px;
   font-weight: 600;
 }
 .c-report__tags {
@@ -64,7 +64,7 @@ const props = defineProps(["avatar", "name", "reasons", "link", "address"]);
   display: none;
 }
 .c-report__tag {
-  font-size: 1.2rem;
+  font-size: 12px;
   font-weight: 500;
   border-radius: 8px;
   border: 1px solid #f4f4f4;

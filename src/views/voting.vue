@@ -58,7 +58,7 @@ onBeforeMount(async () => {
   margin-block: 22px 48px;
 }
 .assessment__header-title {
-  font-size: 2.4rem;
+  font-size: 24px;
   font-weight: 500;
 }
 .assessment__content {

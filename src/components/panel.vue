@@ -165,13 +165,13 @@ onMounted(async () => {
   background-color: #4e4f51;
   gap: 16px;
   padding-inline: 16px;
-  font-size: 1.5rem;
+  font-size: 15px;
   font-weight: 500;
 }
 .c-panel__button {
   height: 48px;
   border-radius: 12px;
-  font-size: 1.5rem;
+  font-size: 15px;
   font-weight: 600;
 }
 .c-panel__button-primary {
@@ -211,7 +211,7 @@ onMounted(async () => {
   background-color: #f4f4f4;
 }
 .c-panel__text {
-  font-size: 1.5rem;
+  font-size: 15px;
   color: #f4f4f4;
 }
 .c-panel__text-secondary {

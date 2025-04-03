@@ -108,7 +108,7 @@ onMounted(() => {
   width: min(480px, 100%);
 }
 .create-proposal__title {
-  font-size: 2.1rem;
+  font-size: 21px;
   font-weight: 500;
 }
 .c-form {
@@ -132,8 +132,8 @@ onMounted(() => {
   flex-grow: 1;
 }
 .c-form__label {
-  font-size: 1.2rem;
-  line-height: 1.2rem;
+  font-size: 12px;
+  line-height: 12px;
   font-weight: 500;
   color: var(--text-color-secondary);
 }
@@ -148,7 +148,7 @@ onMounted(() => {
   height: 32px;
   border-radius: 8px;
   padding-inline: 16px;
-  font-size: 1.2rem;
+  font-size: 12px;
   font-weight: 500;
   margin-left: auto;
   background-color: var(--color-blue);
@@ -163,7 +163,7 @@ onMounted(() => {
   background-color: var(--bg-color-secondary);
   color: var(--text-color-secondary);
   border-radius: 8px;
-  font-size: 1.7rem;
+  font-size: 17px;
   font-weight: 500;
   text-align: center;
 }
@@ -189,7 +189,7 @@ onMounted(() => {
   outline: none;
   word-break: break-word;
   color: var(--text-color-primary);
-  font-size: 1.6rem;
+  font-size: 16px;
   border-bottom: 1px solid var(--text-color-secondary);
   padding-block: 12px;
 }

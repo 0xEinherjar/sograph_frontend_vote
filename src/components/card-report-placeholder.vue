@@ -46,21 +46,21 @@
   z-index: 5;
 }
 .c-card-report-placeholder__button {
-  height: 4rem;
+  height: 40px;
   border-radius: 8px;
 }
 .c-card-report-placeholder__tags {
   gap: 16px;
 }
 .c-card-report-placeholder__tag {
-  height: 3.2rem;
+  height: 3.20px;
   border-radius: 8px;
 }
 .c-card-report-placeholder__tag:nth-child(1) {
-  width: 8rem;
+  width: 80px
 }
 .c-card-report-placeholder__tag:nth-child(2) {
-  width: 12rem;
+  width: 120px;
 }
 .c-card-report-placeholder__avatar {
   height: 40px;
@@ -68,14 +68,14 @@
   border-radius: 50%;
 }
 .c-card-report-placeholder__name {
-  height: 1.6rem;
+  height: 16px;
   width: 70px;
   margin-left: 24px;
   border-radius: 4px;
 }
 .c-card-report-placeholder__view {
-  height: 3.2rem;
-  width: 5rem;
+  height: 3.20px;
+  width: 50px;
   margin-left: auto;
   border-radius: 8px;
 }

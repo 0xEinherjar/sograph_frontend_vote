@@ -164,21 +164,21 @@ onMounted(() => {
   background-color: #f4f4f4;
   color: #28292b;
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 15px;
   font-weight: 500;
 }
 .assessment__card {
-  padding: 4.8rem;
+  padding: 48px;
   border-radius: 12px;
   border: 1px solid #f4f4f4;
   display: grid;
   gap: 48px;
 }
 .assessment__card-header {
-  gap: 2.4rem;
+  gap: 24px;
 }
 .assessment__card-name {
-  font-size: 2.4rem;
+  font-size: 24px;
   font-weight: 500;
   flex-grow: 1;
 }
@@ -189,7 +189,7 @@ onMounted(() => {
   height: 40px;
   padding-inline: 16px;
   border-radius: 12px;
-  font-size: 1.3rem;
+  font-size: 13px;
   font-weight: 500;
 }
 .assessment__card-button--default {
@@ -220,7 +220,7 @@ onMounted(() => {
   color: var(--text-color-secondary);
 }
 .assessment__card-info {
-  font-size: 1.4rem;
+  font-size: 14px;
   font-weight: 500;
 }
 .assessment__card-info-dot {
@@ -251,7 +251,7 @@ onMounted(() => {
 .assessment__card-vote-action {
   height: 32px;
   border-radius: 8px;
-  font-size: 1.2rem;
+  font-size: 12px;
   font-weight: 500;
   padding-inline: 16px;
 }
