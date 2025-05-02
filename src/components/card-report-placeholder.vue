@@ -46,7 +46,6 @@
   z-index: 5;
 }
 .c-card-report-placeholder__button {
-  height: 40px;
   height: 54px;
   border-radius: 8px;
 }
@@ -54,14 +53,13 @@
   gap: 16px;
 }
 .c-card-report-placeholder__tag {
-  height: 3.2rem;
+  height: 40px;
   border-radius: 8px;
 }
 .c-card-report-placeholder__tag:nth-child(1) {
   width: 80px;
 }
 .c-card-report-placeholder__tag:nth-child(2) {
-  width: 120px;
   width: 120px;
 }
 .c-card-report-placeholder__avatar {
@@ -70,7 +68,6 @@
   border-radius: 50%;
 }
 .c-card-report-placeholder__name {
-  height: 16px;
   height: 16px;
   width: 70px;
   margin-left: 24px;

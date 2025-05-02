@@ -261,9 +261,9 @@ onMounted(() => {
 }
 .assessment__card-vote-option,
 .assessment__card-vote-action {
-  height: 32px;
-  border-radius: 8px;
-  font-size: 1.2rem;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 14px;
   font-weight: 500;
   padding-inline: 24px;
 }
