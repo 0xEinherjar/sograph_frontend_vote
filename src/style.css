@@ -103,15 +103,15 @@ body {
   height: auto;
 }
 body {
-  font-size: var(--step-0);
+  font-size: 1.6rem;
   background-color: var(--bg-color-primary);
   color: var(--text-color-primary);
   font-family: "Inter", sans-serif;
   font-weight: 400;
   line-height: 150%;
   -webkit-font-smoothing: antialiased;
-  min-height: 100dvh;
-  padding-inline: 40px;
+  min-height: 100vh;
+  padding-inline: 4rem;
   --width: 1440px;
   display: grid;
   grid-template-columns:
@@ -172,8 +172,91 @@ body {
 .c-icon--fill-none {
   fill: none;
 }
+.c-soon {
+  position: relative;
+  cursor: default !important;
+}
+.c-soon::before {
+  opacity: 1;
+  content: "Soon";
+  position: absolute;
+  top: -1px;
+  right: 67%;
+  color: var(--text-color-primary);
+  background-color: var(--color-red);
+  padding: 2px 4px 3px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+.header {
+  height: 100px;
+  gap: 40px;
+}
+.header__nav {
+  flex-grow: 1;
+  gap: 24px;
+}
+.header__nav-item {
+  color: var(--text-color-primary);
+  font-size: 1.6rem;
+  font-weight: 500;
+  cursor: pointer;
+}
 .c-text-disable {
   opacity: 0.4;
+}
+.header__button {
+  font-weight: 600;
+  color: var(--text-color-quinary);
+  border-radius: 12px;
+  padding-inline: 24px;
+  font-size: 15px;
+  height: 48px;
+  background-color: var(--bg-color-quaternary);
+}
+.header__user {
+  gap: 12px;
+  flex-shrink: 0;
+}
+.header__dropdown {
+  position: relative;
+  height: 100%;
+}
+.header__submenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--bg-color-secondary);
+  padding: 24px 32px;
+  border-radius: 8px;
+  width: 220px;
+  display: none;
+  z-index: 5;
+}
+.header__submenu-title {
+  font-size: 1.7rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.header__submenu-address {
+  margin-bottom: 24px;
+  opacity: 0.4;
+  font-size: 1.4rem;
+}
+.header__submenu-list {
+  display: grid;
+  gap: 24px;
+}
+.header__submenu-item {
+  color: var(--text-color-secondary);
+}
+.header__dropdown:hover .header__submenu {
+  display: block;
+}
+.header__right {
+  margin-left: auto;
+  gap: 4rem;
 }
 .l-section {
   display: grid;

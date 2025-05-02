@@ -105,7 +105,12 @@ onMounted(async () => {
   line-height: 17px;
 }
 .c-panel__button {
-  height: 54px;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.c-panel__button-primary {
   background-color: #f4f4f4;
   border-radius: 12px;
   font-weight: 500;
@@ -147,29 +152,31 @@ onMounted(async () => {
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
-.c-panel__body {
-  display: grid;
-  gap: 32px;
+.c-panel__icon {
+  border-radius: 12px;
+  height: 48px;
+  width: 48px;
+  background-color: #f4f4f4;
 }
-@media (width < 600px) {
-  .c-panel {
-    width: 100%;
-    gap: 24px;
-    padding: 24px;
-  }
-  .c-panel__body {
-    gap: 24px;
-  }
-  .c-panel__button {
-    height: 40px;
-    border-radius: 8px;
-  }
-  .c-panel__reward-info-title {
-    font-size: 13px;
-  }
-  .c-panel__nav-button {
-    height: 40px;
-    border-radius: 8px;
-  }
+.c-panel__text {
+  font-size: 1.5rem;
+  color: #f4f4f4;
+}
+.c-panel__text-secondary {
+  /* text-transform: uppercase; */
+  color: #e8eaed;
+  opacity: 0.6;
+  margin-left: 4px;
+}
+.c-panel__text--fluid {
+  flex-grow: 1;
+}
+.c-panel__field {
+  height: 40px;
+  border-bottom: 1px solid #f4f4f4;
+}
+.c-panel__field-input {
+  flex-grow: 1;
+  height: 100%;
 }
 </style>

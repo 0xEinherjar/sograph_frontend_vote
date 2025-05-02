@@ -46,6 +46,7 @@ const props = defineProps(["avatar", "name", "reasons", "link", "address"]);
   border-radius: 8px;
   padding-inline: 12px;
   font-size: 12px;
+  font-size: 12px;
   font-weight: 500;
   background-color: var(--bg-color-tertiary);
 }
@@ -67,6 +68,7 @@ const props = defineProps(["avatar", "name", "reasons", "link", "address"]);
   display: none;
 }
 .c-report__tag {
+  font-size: 12px;
   font-size: 12px;
   font-weight: 500;
   border-radius: 8px;

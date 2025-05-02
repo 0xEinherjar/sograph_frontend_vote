@@ -138,6 +138,8 @@ onMounted(() => {
 .c-form__label {
   font-size: 12px;
   line-height: 12px;
+  font-size: 12px;
+  line-height: 12px;
   font-weight: 500;
   color: var(--text-color-secondary);
 }
@@ -152,6 +154,7 @@ onMounted(() => {
   height: 32px;
   border-radius: 8px;
   padding-inline: 16px;
+  font-size: 12px;
   font-size: 12px;
   font-weight: 500;
   margin-left: auto;
@@ -193,6 +196,7 @@ onMounted(() => {
   outline: none;
   word-break: break-word;
   color: var(--text-color-primary);
+  font-size: 16px;
   font-size: 16px;
   border-bottom: 1px solid var(--text-color-secondary);
   padding-block: 12px;
