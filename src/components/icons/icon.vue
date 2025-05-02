@@ -4,6 +4,7 @@ import * as Icon from "./";
 const props = defineProps(["iconClass", "name"]);
 const compRef = shallowRef({
   close: Icon.Close,
+  add: Icon.Add,
 });
 </script>
 <!-- prettier-ignore -->

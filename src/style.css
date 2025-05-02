@@ -1,4 +1,28 @@
 :root {
+  /* Step -4: 10.8012px → 12.3442px */
+  --step--4: clamp(0.6751rem, 0.5979rem + 0.1929vw, 0.7715rem);
+  /* Step -3: 11.5248px → 13.1712px */
+  --step--3: clamp(0.7203rem, 0.638rem + 0.2058vw, 0.8232rem);
+  /* Step -2: 12.297px → 14.0537px */
+  --step--2: clamp(0.7686rem, 0.6807rem + 0.2196vw, 0.8784rem);
+  /* Step -1: 13.1209px → 14.9953px */
+  --step--1: clamp(0.8201rem, 0.7263rem + 0.2343vw, 0.9372rem);
+  /* Step 0: 14px → 16px */
+  --step-0: clamp(0.875rem, 0.775rem + 0.25vw, 1rem);
+  /* Step 1: 14.938px → 17.072px */
+  --step-1: clamp(0.9336rem, 0.8269rem + 0.2668vw, 1.067rem);
+  /* Step 2: 15.9388px → 18.2158px */
+  --step-2: clamp(0.9962rem, 0.8823rem + 0.2846vw, 1.1385rem);
+  /* Step 3: 17.0067px → 19.4363px */
+  --step-3: clamp(1.0629rem, 0.9414rem + 0.3037vw, 1.2148rem);
+  /* Step 4: 18.1462px → 20.7385px */
+  --step-4: clamp(1.1341rem, 1.0045rem + 0.324vw, 1.2962rem);
+  /* Step 5: 17.0067px → 37.8975px
+  --step-5: clamp(1.0629rem, 0.0184rem + 2.6113vw, 2.3686rem); */
+  /* Step 5: 25.2285px → 39.8131px */
+  --step-5: clamp(1.5768rem, 0.8475rem + 1.8231vw, 2.4883rem);
+}
+:root {
   /* Background color */
   --bg-color-primary: #1a1b1d;
   --bg-color-secondary: #28292b;
@@ -74,23 +98,20 @@ button {
 button {
   cursor: pointer;
 }
-html {
-  font-size: 62.5%;
-}
 html,
 body {
   height: auto;
 }
 body {
-  font-size: 1.6rem;
+  font-size: var(--step-0);
   background-color: var(--bg-color-primary);
   color: var(--text-color-primary);
   font-family: "Inter", sans-serif;
   font-weight: 400;
   line-height: 150%;
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  padding-inline: 4rem;
+  min-height: 100dvh;
+  padding-inline: 40px;
   --width: 1440px;
   display: grid;
   grid-template-columns:
@@ -133,106 +154,26 @@ body {
 .is-hidden {
   display: none !important;
 }
+.u-cursor-pointer {
+  cursor: pointer;
+}
 .c-icon,
 .c-icon--small {
   color: var(--color-icon-primary);
 }
 .c-icon {
-  height: 2.4rem;
-  width: 2.4rem;
+  height: 24px;
+  width: 24px;
 }
 .c-icon--small {
-  height: 2rem;
-  width: 2rem;
+  height: 20px;
+  width: 20px;
 }
 .c-icon--fill-none {
   fill: none;
 }
-.c-soon {
-  position: relative;
-  cursor: default !important;
-}
-.c-soon::before {
-  opacity: 1;
-  content: "Soon";
-  position: absolute;
-  top: -1px;
-  right: 67%;
-  color: var(--text-color-primary);
-  background-color: var(--color-red);
-  padding: 2px 4px 3px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  line-height: 1;
-}
-.header {
-  height: 100px;
-  gap: 40px;
-}
-.header__nav {
-  flex-grow: 1;
-  gap: 24px;
-}
-.header__nav-item {
-  color: var(--text-color-primary);
-  font-size: 1.6rem;
-  font-weight: 500;
-  cursor: pointer;
-}
 .c-text-disable {
   opacity: 0.4;
-}
-.header__button {
-  font-weight: 600;
-  color: var(--text-color-quinary);
-  border-radius: 12px;
-  padding-inline: 24px;
-  font-size: 15px;
-  height: 48px;
-  background-color: var(--bg-color-quaternary);
-}
-.header__user {
-  gap: 12px;
-  flex-shrink: 0;
-}
-.header__dropdown {
-  position: relative;
-  height: 100%;
-}
-.header__submenu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: var(--bg-color-secondary);
-  padding: 24px 32px;
-  border-radius: 8px;
-  width: 220px;
-  display: none;
-  z-index: 5;
-}
-.header__submenu-title {
-  font-size: 1.7rem;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-.header__submenu-address {
-  margin-bottom: 24px;
-  opacity: 0.4;
-  font-size: 1.4rem;
-}
-.header__submenu-list {
-  display: grid;
-  gap: 24px;
-}
-.header__submenu-item {
-  color: var(--text-color-secondary);
-}
-.header__dropdown:hover .header__submenu {
-  display: block;
-}
-.header__right {
-  margin-left: auto;
-  gap: 4rem;
 }
 .l-section {
   display: grid;
@@ -240,6 +181,38 @@ body {
   margin-top: 24px;
 }
 .l-section__title {
-  font-size: 2.4rem;
+  font-size: 24px;
   font-weight: 500;
+}
+.l-section__header {
+  display: grid;
+  gap: 24px;
+}
+.l-section__subtitle {
+  color: var(--text-color-secondary);
+  font-size: var(--step--1);
+}
+@media (width < 600px) {
+  body {
+    padding-inline: 24px;
+  }
+  .l-section {
+    gap: 24px;
+    margin-top: 16px;
+  }
+  .l-section__header {
+    gap: 16px;
+  }
+  .l-section__title {
+    font-size: 17px;
+  }
+  .header {
+    height: auto;
+    padding-block: 16px;
+    gap: 24px;
+  }
+  .c-icon {
+    height: 22px;
+    width: 22px;
+  }
 }

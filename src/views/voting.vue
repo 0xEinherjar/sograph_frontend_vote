@@ -17,7 +17,13 @@ onBeforeMount(async () => {
 <template>
   <heading/>
   <section class="l-section">
-    <h3 class="l-section__title">Ban Proposals</h3>
+    <div class="l-section__header">
+      <h3 class="l-section__title">Ban Proposals</h3>
+      <div class="l-section__subtitle">
+        <p>Deposit WBTC to participate in the moderation process and earn rewards.</p>
+        <p>You can withdraw your WBTC at any time.</p>
+      </div>
+    </div>
     <div class="assessment__content">
       <aside class="assessment__aside">
         <panel/>
@@ -27,6 +33,7 @@ onBeforeMount(async () => {
           <loading type="medium"/>
         </template>
         <template v-else>
+          <h4 class="assessment__header-title">Proposals</h4>
           <template v-if="assessment.length > 0">
             <template v-for="item of assessment">
               <card-assessment 
@@ -58,7 +65,7 @@ onBeforeMount(async () => {
   margin-block: 22px 48px;
 }
 .assessment__header-title {
-  font-size: 2.4rem;
+  font-size: 24px;
   font-weight: 500;
 }
 .assessment__content {
@@ -76,5 +83,22 @@ onBeforeMount(async () => {
   display: grid;
   gap: 48px;
   width: 100%;
+}
+.assessment__header-title {
+  font-size: var(--step-3);
+  font-weight: 500;
+  display: none;
+}
+@media (width < 600px) {
+  .assessment__header-title {
+    display: block;
+  }
+  .assessment__content {
+    flex-direction: column;
+    gap: 40px;
+  }
+  .assessment__aside {
+    width: 100%;
+  }
 }
 </style>

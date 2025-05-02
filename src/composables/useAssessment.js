@@ -8,9 +8,14 @@ const { getProfile } = useProfile();
 export const useAssessment = () => {
   async function getAssessment() {
     try {
+      console.log("chegou");
+
       const assessments = await readProfileGovernanceContract(
-        "fetchAllAssessment"
+        "getAllAssessments"
       );
+      console.log("chegou 2");
+      console.log(assessments);
+
       if (assessments.length == 0) return { data: [], success: true };
       const data = [];
       for (const assessment of assessments) {

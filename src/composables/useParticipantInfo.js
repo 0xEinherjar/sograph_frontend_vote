@@ -7,7 +7,6 @@ const { toNumber } = useUtils();
 
 export const useParticipantInfo = () => {
   async function getParticipantInfo(address) {
-    console.log("chamou");
     const participant = await readProfileGovernanceContract("participants", [
       address,
     ]);

@@ -11,6 +11,8 @@ export { default as Toast } from "./toast.vue";
 export { default as CardReportPlaceholder } from "./card-report-placeholder.vue";
 export { default as ModalConnect } from "./modal-connect.vue";
 export { default as ButtonExecute } from "./button-execute.vue";
-export { default as ButtonStake } from "./button-stake.vue";
-export { default as ButtonWithdraw } from "./button-withdraw.vue";
-export { default as ButtonReward } from "./button-reward.vue";
+export { default as PanelDepositButton } from "./panel-deposit-button.vue";
+
+export { default as PanelDeposit } from "./panel-deposit.vue";
+export { default as PanelWithdraw } from "./panel-withdraw.vue";
+export { default as PanelReward } from "./panel-reward.vue";

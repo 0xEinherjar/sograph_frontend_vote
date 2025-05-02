@@ -113,12 +113,14 @@ onMounted(() => {
       </button>
     </div>
     <div v-else class="assessment__card-name">{{ props.profileName }}</div>
+  </header>
+  <div class="assessment__card-buttons u-flex-line">
     <a v-if="props.state != 4" target="_blank" :href="`https://sograph.app/#/${props.profileHandle || props.profile}`" class="assessment__card-button u-flex-line-center assessment__card-button--default" type="button">View</a>
     <button v-if="state == 2" class="assessment__card-button u-flex-line-center assessment__card-button--active" type="button">Active</button>
     <button v-if="state == 1" class="assessment__card-button u-flex-line-center assessment__card-button--pending" type="button">Pending</button>
     <button v-if="state == 5" class="assessment__card-button u-flex-line-center assessment__card-button--reestablished" type="button">Reestablished</button>
     <button v-if="state == 4" class="assessment__card-button u-flex-line-center assessment__card-button--banned" type="button">Banned</button>
-  </header>
+  </div>
   <div class="assessment__card-content">
     <h5 class="">Reason</h5>
     <p class="assessment__card-paragraph">{{ props.reason }}</p>
@@ -134,7 +136,7 @@ onMounted(() => {
     </div>
   </div>
   <template v-if="moderator.isConnected">
-    <div v-if="props.state == 2" class="u-flex-line-between">
+    <div v-if="props.state == 1" class="assessment__card-footer u-flex-line-between">
       <div class="assessment__card-vote-group u-flex-line">
         <button @click="selectVote" class="assessment__card-vote-option" type="button">For</button>
         <button @click="selectVote" class="assessment__card-vote-option" type="button">Against</button>
@@ -145,7 +147,7 @@ onMounted(() => {
     <button-execute :id="props.id" @executed="executed" v-if="props.state != 2 && props.state != 1 && !executedAssessment"/>
   </template>
   <template v-else>
-    <div v-if="props.state == 2" class="u-flex-line">
+    <div v-if="props.state == 2" class="assessment__card-footer u-flex-line">
       <div class="assessment__card-vote-group u-flex-line-between">
         <button class="assessment__card-vote-option" type="button">For</button>
         <button class="assessment__card-vote-option" type="button">Against</button>
@@ -164,21 +166,31 @@ onMounted(() => {
   background-color: #f4f4f4;
   color: #28292b;
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 15px;
   font-weight: 500;
 }
 .assessment__card {
-  padding: 4.8rem;
+  padding: 48px;
   border-radius: 12px;
   border: 1px solid #f4f4f4;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #28292b;
   display: grid;
-  gap: 48px;
+  grid-template-columns: 1fr auto;
+  gap: 48px 24px;
 }
+.assessment__card-footer,
+.assessment__card-content,
+.assessment__card-button-execute,
+.assessment__card-info {
+  grid-column: 1 / -1;
+}
+.assessment__card-buttons,
 .assessment__card-header {
-  gap: 2.4rem;
+  gap: 24px;
 }
 .assessment__card-name {
-  font-size: 2.4rem;
+  font-size: 24px;
   font-weight: 500;
   flex-grow: 1;
 }
@@ -189,7 +201,7 @@ onMounted(() => {
   height: 40px;
   padding-inline: 16px;
   border-radius: 12px;
-  font-size: 1.3rem;
+  font-size: 13px;
   font-weight: 500;
 }
 .assessment__card-button--default {
@@ -220,7 +232,7 @@ onMounted(() => {
   color: var(--text-color-secondary);
 }
 .assessment__card-info {
-  font-size: 1.4rem;
+  font-size: 14px;
   font-weight: 500;
 }
 .assessment__card-info-dot {
@@ -249,18 +261,76 @@ onMounted(() => {
 }
 .assessment__card-vote-option,
 .assessment__card-vote-action {
-  height: 32px;
-  border-radius: 8px;
-  font-size: 1.2rem;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 14px;
   font-weight: 500;
-  padding-inline: 16px;
+  padding-inline: 24px;
 }
 .assessment__card-vote-option {
-  border: 1px solid #f4f4f4;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #4e4f51;
+}
+.assessment__card-vote-option:hover {
+  background-color: #bdc1c6;
+  color: #28292b;
 }
 .assessment__card-vote-option.is-active,
 .assessment__card-vote-action {
   background-color: #f4f4f4;
   color: #28292b;
+}
+@media (width < 600px) {
+  .assessment__card {
+    padding: 24px;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+  .assessment__card-buttons {
+    flex-direction: column;
+    grid-row: 4/5;
+    gap: 16px;
+  }
+  .assessment__card-buttons .assessment__card-button {
+    width: 100%;
+    border-radius: 8px;
+  }
+  .assessment__card-button {
+    border-radius: 8px;
+  }
+  .assessment__card-info {
+    flex-direction: column-reverse;
+    align-items: flex-start !important;
+    gap: 10px;
+  }
+  .assessment__card .c-avatar {
+    height: 40px !important;
+    width: 40px !important;
+  }
+  .assessment__card-header {
+    gap: 16px;
+  }
+  .assessment__card-name {
+    font-size: 20px;
+  }
+  .assessment__list {
+    gap: 40px !important;
+  }
+  .assessment__card-header-right {
+    display: none !important;
+  }
+  .assessment__card-vote-option,
+  .assessment__card-vote-action {
+    height: 40px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    padding-inline: 16px;
+    border: none;
+    font-size: 12px;
+  }
+  .assessment__card-info-group:nth-child(1) {
+    color: #bdc1c6;
+  }
 }
 </style>

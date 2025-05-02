@@ -3,24 +3,20 @@ import { ref, watch } from "vue";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
 import { abi, contract } from "../contracts/ProfileGovernance.js";
 import { useErrorStore } from "../store/error.js";
-import { Loading } from "./";
-import { useModeratorStore } from "../store/moderator.js";
-import { storeToRefs } from "pinia";
-import { useUtils } from "../composables/utils.js";
-const { valueDisplay } = useUtils();
-const moderatorStore = useModeratorStore();
-const { moderator } = storeToRefs(moderatorStore);
+import { Loading } from "./index.js";
+const props = defineProps(["amount"]);
+const event = defineEmits(["stake"]);
 const { writeContractAsync, data, error } = useWriteContract();
 const isLoading = ref(false);
 const errorStore = useErrorStore();
 
-async function claim() {
-  if (!moderator.value.isConnected || !moderator.value.rewards) return;
+async function stake() {
   isLoading.value = true;
   await writeContractAsync({
     abi: abi,
     address: contract,
-    functionName: "claim",
+    functionName: "stake",
+    args: [props.amount],
   });
 }
 const { isSuccess } = useWaitForTransactionReceipt({
@@ -35,14 +31,14 @@ watch(error, (newError) => {
 watch(isSuccess, async (newIsSuccess) => {
   if (newIsSuccess) {
     isLoading.value = false;
-    moderatorStore.setReward(0);
+    event("stake", props.amount);
   }
 });
 </script>
 <!-- prettier-ignore -->
 <template>
-  <button @click="claim" class="c-panel__button c-panel__button-primary" type="button">
-    <template v-if="!isLoading">Claim Rewards <template v-if="moderator.rewards > 0">({{ valueDisplay(moderator.rewards) }} WBTC)</template></template>
+  <button @click="stake" class="c-panel__button">
+    <template v-if="!isLoading">Deposit</template>
     <loading v-else type="small" theme="dark"/>
   </button>
 </template>

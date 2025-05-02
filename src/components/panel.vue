@@ -1,38 +1,23 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
-import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
+import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useUtils } from "../composables/utils.js";
 import { useModeratorStore } from "../store/moderator.js";
-import { abi, contract } from "../contracts/Token.js";
-import { ButtonStake, Loading, ButtonWithdraw, ButtonReward } from "./";
-import { contract as contractVoting } from "../contracts/ProfileGovernance.js";
+import { PanelDeposit, PanelWithdraw, PanelReward } from "./";
 import { usePanelInfo } from "../composables/usePanelInfo.js";
 import { useReadProfileGovernanceContract } from "../composables/useReadProfileGovernanceContract.js";
 const { readProfileGovernanceContract } = useReadProfileGovernanceContract();
 const moderatorStore = useModeratorStore();
 const { moderator } = storeToRefs(moderatorStore);
-const { writeContractAsync, data } = useWriteContract();
-const { toNumber, valueDisplay } = useUtils();
+const { toNumber } = useUtils();
 const { getPanelInfo } = usePanelInfo();
-const select = ref("Stake");
-const amountVote = ref();
-const amount = ref(0);
-const isLoading = ref(false);
+const select = ref("Deposit");
 const info = ref({
   decimals: 0,
   currency: "",
   minParticipation: 0,
   minParticipationFormated: 0,
 });
-function panelSelect(param) {
-  select.value = param;
-}
-function max() {
-  if (!moderator.value.isConnected) return;
-  if (select.value == "Stake") amountVote.value = moderator.value.balance;
-  else amountVote.value = moderator.value.participation;
-}
 
 function stakeEvent(amount) {
   moderatorStore.setData(
@@ -43,27 +28,6 @@ function stakeEvent(amount) {
     })
   );
 }
-
-async function handleAction() {
-  if (amountVote.value == 0) return;
-  amount.value = amountVote.value * 10 ** info.value.decimals;
-  if (amount.value < toNumber(info.value.minParticipation)) return;
-  isLoading.value = true;
-  await writeContractAsync({
-    abi: abi,
-    address: contract,
-    functionName: "approve",
-    args: [contractVoting, amount.value],
-  });
-}
-
-const { isSuccess } = useWaitForTransactionReceipt({
-  hash: data,
-});
-
-watch(isSuccess, async (newIsSuccess) => {
-  if (newIsSuccess) isLoading.value = false;
-});
 
 onMounted(async () => {
   const result = await getPanelInfo();
@@ -81,154 +45,131 @@ onMounted(async () => {
 <!-- prettier-ignore -->
 <template>
   <div class="c-panel">
-    <div class="c-panel__header u-flex-line">
-      <div class="c-panel__text c-panel__text--fluid">Account balance</div>
-      <div class="c-panel__text">
-        <template v-if="moderator.isConnected">
-          {{ moderator.participation }}
-        </template>
-        <template v-else>0</template>
-        <span class="c-panel__text-secondary">{{ info.currency }}</span>
-      </div>
+    <div class="c-panel__nav u-flex-line">
+      <button class="c-panel__nav-button" @click="select = 'Deposit'" :class="{ 'is-active': select == 'Deposit' }">Deposit</button>
+      <button class="c-panel__nav-button" @click="select = 'Withdraw'" :class="{ 'is-active': select == 'Withdraw' }">Withdraw</button>
+      <button class="c-panel__nav-button" @click="select = 'Reward'" :class="{ 'is-active': select == 'Reward' }">Reward</button>
     </div>
-    <div class="c-panel__select">
-      <div class="c-panel__select-placeholder u-flex-line-between">
-        {{ select }}
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11.6101 9.92251L8.76755 6.13501H4.56006C3.84006 6.13501 3.48006 7.00501 3.99006 7.51501L7.87506 11.4C8.49756 12.0225 9.51006 12.0225 10.1326 11.4L11.6101 9.92251Z" fill="#BDC1C6"/>
-          <path d="M13.4401 6.13501H8.76758L11.6101 9.92251L14.0176 7.51501C14.5201 7.00501 14.1601 6.13501 13.4401 6.13501Z" fill="#BDC1C6"/>
-        </svg>
-      </div>
-      <div class="c-panel__select-options">
-        <div class="c-panel__select-option" @click="panelSelect('Stake')">Stake</div>
-        <div class="c-panel__select-option" @click="panelSelect('Withdraw')">Withdraw</div>
-      </div>
-    </div>
-    <div class="c-panel__field u-flex-line">
-      <input v-if="select=='Stake'" class="c-panel__field-input" type="text" v-model="amountVote" :placeholder="`Minimum of ${info.minParticipationFormated} ${info.currency}`">
-      <input v-else class="c-panel__field-input" type="text" v-model="amountVote" placeholder="0">
-      <button class="c-panel__field-button" type="button" @click="max">Max</button>
-    </div> 
-    <template v-if="moderator.isConnected">
-      <button v-if="moderator.balance < info.minParticipationFormated" class="c-panel__button c-panel__button-primary u-flex-line-center" type="button">
-        Not enough balance
-      </button>
-      <template v-else>
-        <template v-if="select == 'Stake'">
-          <button v-if="!isSuccess" @click="handleAction" class="c-panel__button c-panel__button-primary u-flex-line-center" type="button">
-            <template v-if="!isLoading">Approve</template>
-            <loading v-else type="small" theme="dark"/>
-          </button>
-          <button-stake v-else @stake="stakeEvent" :amount="amount"/>
-        </template>
-        <button-withdraw v-else :amount="amountVote" :decimals="info.decimals"/>
-      </template>
-    </template>
-    <button v-else class="c-panel__button c-panel__button-primary" type="button">Connect</button>
-    <span class="c-panel__line"></span>
-    <button-reward/>
-    <button v-if="moderator.isActive && moderator.isConnected" class="c-panel__button c-panel__button-active" type="button">Active</button>
-    <button v-else class="c-panel__button c-panel__button-no-active" type="button">No active</button>
+    <panel-deposit v-if="select == 'Deposit'" @stake="stakeEvent" :decimals="info.decimals" :minParticipation="info.minParticipation" :hasFund="moderator.balance < info.minParticipationFormated" :isConnected="moderator.isConnected" :balance="moderator.balance"/>
+    <panel-withdraw v-else-if="select == 'Withdraw'" :decimals="info.decimals" :isConnected="moderator.isConnected" :participation="moderator.participation"/>
+    <panel-reward v-else-if="select == 'Reward'" @rewardsClaimed="moderator.setReward(0)"/>
   </div>
 </template>
 <style>
-.c-panel__select {
-  cursor: pointer;
-  position: relative;
+.c-panel__nav {
+  gap: 16px;
 }
-.c-panel__select-options {
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  right: 0;
-  background-color: #4e4f51;
-  border-radius: 12px;
-  overflow: hidden;
-  display: none;
-}
-.c-panel__select:hover .c-panel__select-options {
-  display: block;
-}
-.c-panel__select-option {
-  padding-inline: 16px;
+.c-panel__nav-button {
   height: 48px;
-  line-height: 48px;
+  border-radius: 12px;
+  background-color: #4e4f51;
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: #f4f4f4;
+  padding-inline: 16px;
+  flex-grow: 1;
 }
-.c-panel__select-option:hover {
+.c-panel__nav-button:hover {
   background-color: #bdc1c6;
   color: #28292b;
   font-weight: 500;
 }
-.c-panel__select-placeholder {
-  height: 48px;
-  border-radius: 12px;
-  background-color: #4e4f51;
-  gap: 16px;
-  padding-inline: 16px;
-  font-size: 1.5rem;
-  font-weight: 500;
-}
-.c-panel__button {
-  height: 48px;
-  border-radius: 12px;
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-.c-panel__button-primary {
+.c-panel__nav-button.is-active {
   background-color: #f4f4f4;
   color: #28292b;
+  font-weight: 500;
 }
-.c-panel__line {
-  height: 1px;
+.c-panel__input {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+}
+.c-panel__input-header {
+  color: var(--text-color-secondary);
+}
+.c-panel__input-currency {
+  font-size: var(--step--2);
+  font-weight: 500;
+  gap: 6px;
+  background-color: #4e4f51;
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+.c-panel__input-currency img {
+  height: 22px;
+  width: 22px;
+}
+.c-panel__input-currency span {
+  line-height: 17px;
+}
+.c-panel__button {
+  height: 54px;
   background-color: #f4f4f4;
-  opacity: 0.6;
+  border-radius: 12px;
+  font-weight: 500;
+  color: #28292b;
+  display: grid;
+  place-items: center;
+  width: 100%;
 }
-.c-panel__button-no-active {
-  background-color: rgba(255, 99, 112, 0.2);
-  color: #f4f4f4;
+.c-panel__reward-info {
+  display: grid;
+  gap: 8px;
+}
+.c-panel__reward-info-title {
+  font-size: 14px;
   font-weight: 500;
 }
-.c-panel__button-active {
-  background-color: rgba(1, 119, 251, 0.2);
-  color: #f4f4f4;
-  font-weight: 500;
+.c-panel__reward-info-content {
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-color-secondary);
+}
+.c-panel__reward-info-content img {
+  width: 20px;
+  height: 20px;
+}
+.c-panel__reward-info-content span {
+  line-height: 20px;
+}
+.c-panel__info {
+  font-size: 12px;
+  color: var(--text-color-secondary);
 }
 .c-panel {
   background-color: #28292b;
   display: grid;
-  gap: 40px;
+  gap: 32px;
   padding: 24px;
-  width: 400px;
+  width: 480px;
   border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
-.c-panel__header {
-  gap: 16px;
+.c-panel__body {
+  display: grid;
+  gap: 32px;
 }
-.c-panel__icon {
-  border-radius: 12px;
-  height: 48px;
-  width: 48px;
-  background-color: #f4f4f4;
-}
-.c-panel__text {
-  font-size: 1.5rem;
-  color: #f4f4f4;
-}
-.c-panel__text-secondary {
-  /* text-transform: uppercase; */
-  color: #e8eaed;
-  opacity: 0.6;
-  margin-left: 4px;
-}
-.c-panel__text--fluid {
-  flex-grow: 1;
-}
-.c-panel__field {
-  height: 40px;
-  border-bottom: 1px solid #f4f4f4;
-}
-.c-panel__field-input {
-  flex-grow: 1;
-  height: 100%;
+@media (width < 600px) {
+  .c-panel {
+    width: 100%;
+    gap: 24px;
+    padding: 24px;
+  }
+  .c-panel__body {
+    gap: 24px;
+  }
+  .c-panel__button {
+    height: 40px;
+    border-radius: 8px;
+  }
+  .c-panel__reward-info-title {
+    font-size: 13px;
+  }
+  .c-panel__nav-button {
+    height: 40px;
+    border-radius: 8px;
+  }
 }
 </style>

@@ -56,4 +56,9 @@ onMounted(async () => {
   grid-template-columns: repeat(auto-fit, minmax(400px, max-content));
   gap: 40px;
 }
+@media (width < 600px) {
+  .l-reports {
+    grid-template-columns: repeat(auto-fit, minmax(100%, max-content));
+  }
+}
 </style>

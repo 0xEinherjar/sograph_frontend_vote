@@ -27,14 +27,17 @@ const props = defineProps(["avatar", "name", "reasons", "link", "address"]);
   gap: 32px;
   padding: 24px;
   width: 100%;
-  border: 1px solid #f4f4f4;
+  /* border: 1px solid #f4f4f4; */
   border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  background-color: #28292b;
 }
 .c-report__header {
   gap: 24px;
 }
 .c-report__name {
-  height: 1.9rem;
+  height: 19px;
   font-weight: 500;
   flex-grow: 1;
 }
@@ -42,18 +45,18 @@ const props = defineProps(["avatar", "name", "reasons", "link", "address"]);
   height: 32px;
   border-radius: 8px;
   padding-inline: 12px;
-  font-size: 1.2rem;
+  font-size: 12px;
   font-weight: 500;
   background-color: var(--bg-color-tertiary);
 }
 .c-report__create {
   background-color: #f4f4f4;
-  border-radius: 8px;
-  height: 40px;
+  border-radius: 12px;
+  height: 54px;
   width: 100%;
-  color: #1a1b1d;
-  font-size: 1.2rem;
-  font-weight: 600;
+  color: #28292b;
+  font-size: 15px;
+  font-weight: 500;
 }
 .c-report__tags {
   display: flex;
@@ -64,12 +67,29 @@ const props = defineProps(["avatar", "name", "reasons", "link", "address"]);
   display: none;
 }
 .c-report__tag {
-  font-size: 1.2rem;
+  font-size: 12px;
   font-weight: 500;
   border-radius: 8px;
-  border: 1px solid #f4f4f4;
-  height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  height: 40px;
   padding-inline: 16px;
   white-space: nowrap;
+}
+@media (width < 600px) {
+  .c-report {
+    gap: 24px;
+  }
+  .c-report__create {
+    height: 40px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  .c-report__tag {
+    height: 32px;
+    padding-inline: 12px;
+  }
+  .c-report__header {
+    gap: 16px;
+  }
 }
 </style>

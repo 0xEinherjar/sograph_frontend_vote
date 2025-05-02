@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
-import { Loading } from "./";
+import { Icon, Loading } from "./";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
 import { abi, contract } from "../contracts/ProfileGovernance.js";
 import { useErrorStore } from "../store/error.js";
@@ -62,7 +62,7 @@ onMounted(() => {
       <div class="create-proposal__header u-flex-line-between">
         <h3 class="create-proposal__title">Ban Proposal</h3>
         <button class="create-proposal__close" type="button" @click="show = false">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="c-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g opacity="0.4">
               <path d="M9.16992 14.8299L14.8299 9.16992" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M14.8299 14.8299L9.16992 9.16992" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -94,6 +94,9 @@ onMounted(() => {
     </div>
   </Teleport>
   <button @click="show = true" :class="props.classButton" type="button">Create an assessment</button>
+  <button class="c-form__open-mobile" @click="show = true" type="button">
+    <icon iconClass="c-icon" name="add"/>
+  </button>
 </template>
 <style>
 .create-proposal {
@@ -103,12 +106,13 @@ onMounted(() => {
   z-index: 1000;
   flex-direction: column;
   gap: 48px;
+  padding: 24px;
 }
 .create-proposal__header {
   width: min(480px, 100%);
 }
 .create-proposal__title {
-  font-size: 2.1rem;
+  font-size: var(--step-4);
   font-weight: 500;
 }
 .c-form {
@@ -132,8 +136,8 @@ onMounted(() => {
   flex-grow: 1;
 }
 .c-form__label {
-  font-size: 1.2rem;
-  line-height: 1.2rem;
+  font-size: 12px;
+  line-height: 12px;
   font-weight: 500;
   color: var(--text-color-secondary);
 }
@@ -148,7 +152,7 @@ onMounted(() => {
   height: 32px;
   border-radius: 8px;
   padding-inline: 16px;
-  font-size: 1.2rem;
+  font-size: 12px;
   font-weight: 500;
   margin-left: auto;
   background-color: var(--color-blue);
@@ -163,7 +167,7 @@ onMounted(() => {
   background-color: var(--bg-color-secondary);
   color: var(--text-color-secondary);
   border-radius: 8px;
-  font-size: 1.7rem;
+  font-size: var(--step-1);
   font-weight: 500;
   text-align: center;
 }
@@ -189,7 +193,7 @@ onMounted(() => {
   outline: none;
   word-break: break-word;
   color: var(--text-color-primary);
-  font-size: 1.6rem;
+  font-size: 16px;
   border-bottom: 1px solid var(--text-color-secondary);
   padding-block: 12px;
 }
@@ -202,5 +206,51 @@ onMounted(() => {
 }
 .c-form__textarea-input::-webkit-scrollbar {
   width: 6px;
+}
+.c-form__open-mobile {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  display: none;
+  place-items: center;
+  background-color: #f4f4f4;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+}
+.c-form__open-mobile svg {
+  color: #28292b !important;
+}
+@media (width < 600px) {
+  .create-proposal {
+    padding: 24px;
+    display: grid !important;
+    grid-template-rows: auto 1fr;
+    justify-content: normal !important;
+    align-items: flex-start !important;
+  }
+  .c-form__input--name {
+    padding-inline: 16px;
+    height: 40px;
+  }
+  .c-form__textarea-input {
+    min-height: 40px;
+    padding-block: 8px;
+  }
+  .c-form__textarea-placeholder {
+    min-height: 40px;
+    line-height: 40px;
+  }
+  .header__button {
+    display: none !important;
+  }
+  .create-proposal .c-form {
+    height: 100%;
+    grid-template-rows: max-content 1fr max-content;
+    align-items: flex-start;
+  }
+  .c-form__open-mobile {
+    display: grid;
+  }
 }
 </style>
