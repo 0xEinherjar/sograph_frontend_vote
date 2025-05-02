@@ -23,14 +23,12 @@
   --step-5: clamp(1.5768rem, 0.8475rem + 1.8231vw, 2.4883rem);
 }
 :root {
-  /* Background color */
   --bg-color-primary: #1a1b1d;
   --bg-color-secondary: #28292b;
   --bg-color-tertiary: #4e4f51;
   --bg-color-quaternary: #f4f4f4;
   --bg-color-quinary: #bdc1c6;
 
-  /* text color */
   --text-color-primary: #f4f4f4;
   --text-color-secondary: #bdc1c6;
   --text-color-tertiary: #f4f4f466;
@@ -98,6 +96,7 @@ button {
 button {
   cursor: pointer;
 }
+
 html,
 body {
   height: auto;
