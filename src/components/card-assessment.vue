@@ -5,7 +5,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useModeratorStore } from "../store/moderator.js";
 import { storeToRefs } from "pinia";
 import { useWriteContract } from "@wagmi/vue";
-import { abi, contract } from "../contracts/ProfileGovernance.js";
+import { abi, contract } from "../contracts/";
 import { useErrorStore } from "../store/error.js";
 
 const errorStore = useErrorStore();
@@ -78,8 +78,8 @@ async function vote() {
   const voteTarget = voteMap[selectedOption.innerText] || 0;
   if (voteTarget !== 0) {
     await writeContractAsync({
-      abi: abi,
-      address: contract,
+      abi: abi.ProfileGovernance,
+      address: contract.ProfileGovernance,
       functionName: "castVote",
       args: [props.id, voteTarget],
     });
@@ -172,9 +172,8 @@ onMounted(() => {
 .assessment__card {
   padding: 48px;
   border-radius: 12px;
-  border: 1px solid #f4f4f4;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background-color: #28292b;
+  background-color: var(--bg-color-secondary);
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 48px 24px;

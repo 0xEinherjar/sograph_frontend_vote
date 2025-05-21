@@ -1,5 +1,4 @@
-export const contract = "0xB11e64319f50209B718AFd7A81584d1BEa3F1F9b";
-export const abi = [
+export default [
   {
     inputs: [
       {
@@ -308,6 +307,25 @@ export const abi = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "profileByPost",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

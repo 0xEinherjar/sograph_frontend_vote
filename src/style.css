@@ -24,18 +24,18 @@
 }
 :root {
   /* Background color */
-  --bg-color-primary: #1a1b1d;
-  --bg-color-secondary: #28292b;
+  --bg-color-primary: #08080a;
+  --bg-color-secondary: #1a1b1d;
   --bg-color-tertiary: #4e4f51;
   --bg-color-quaternary: #f4f4f4;
-  --bg-color-quinary: #bdc1c6;
+  --bg-color-quinary: #71767b;
 
   /* text color */
   --text-color-primary: #f4f4f4;
-  --text-color-secondary: #bdc1c6;
+  --text-color-secondary: #71767b;
   --text-color-tertiary: #f4f4f466;
   --text-color-quaternary: #e8eaed;
-  --text-color-quinary: #28292b;
+  --text-color-quinary: #1a1b1d;
 
   --color-red: #ff6370;
   --color-blue-light: #96e7fe;
@@ -175,6 +175,66 @@ body {
 .c-text-disable {
   opacity: 0.4;
 }
+.u-pointer {
+  cursor: pointer;
+}
+.u-fluid {
+  width: 100%;
+}
+.c-modal--backdrop {
+  background-color: rgba(0, 0, 0, 0.9);
+  position: fixed;
+  inset: 0 0 0 0;
+  z-index: 101;
+}
+.c-modal {
+  width: min(520px, 100%);
+  border-radius: 20px;
+  background-color: var(--bg-color-secondary);
+  display: grid;
+  gap: 32px;
+}
+.c-modal__title {
+  gap: 12px;
+}
+.c-modal__content {
+  padding: 32px 24px;
+  display: grid;
+  gap: 32px;
+}
+.c-modal__footer {
+  padding-inline: 24px;
+  padding-bottom: 32px;
+}
+.c-modal:has(.c-modal__footer) .c-modal__content {
+  padding-bottom: 0;
+}
+.c-button {
+  --b-bg: var(--bg-color-quaternary);
+  --b-color: var(--text-color-quinary);
+  --b-ra: 12px;
+  --b-fs: var(--step--1);
+  --b-fw: 500;
+  --b-px: 24px;
+  --b-he: 40px;
+  --b-ga: 12px;
+  border-radius: var(--b-ra);
+  background-color: var(--b-bg);
+  color: var(--b-color);
+  font-size: var(--b-fs);
+  font-weight: var(--b-fw);
+  padding-inline: var(--b-px);
+  height: var(--b-he);
+  gap: var(--b-ga);
+}
+.c-button--large {
+  --b-he: 48px;
+}
+.c-button--extra-large {
+  --b-he: 54px;
+  --b-fs: var(--step-0);
+  --b-fw: 400;
+}
 .l-section {
   display: grid;
   gap: 48px;
@@ -214,5 +274,24 @@ body {
   .c-icon {
     height: 22px;
     width: 22px;
+  }
+  .c-button--extra-large {
+    --b-he: 40px;
+    --b-ra: 8px;
+    --b-fw: 500;
+  }
+  .c-modal {
+    height: 100dvh;
+    border-radius: 0;
+    grid-template-rows: auto 1fr;
+    gap: 24px;
+  }
+  .c-modal__content {
+    padding: 24px 24px 0 24px;
+    align-content: flex-start;
+    gap: 24px;
+  }
+  .c-modal__footer {
+    align-self: flex-end;
   }
 }

@@ -1,5 +1,4 @@
-export const contract = "0x6Dc82C447dCCE2cE75304b72F26Eb32091B17e08";
-export const abi = [
+export default [
   {
     inputs: [],
     stateMutability: "nonpayable",
@@ -352,6 +351,19 @@ export const abi = [
         internalType: "string",
         name: "metadata",
         type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "counter",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

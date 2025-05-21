@@ -62,10 +62,9 @@ onMounted(async () => {
 .c-panel__nav-button {
   height: 48px;
   border-radius: 12px;
-  background-color: #4e4f51;
+  background-color: var(--bg-color-tertiary);
   font-size: var(--step--1);
   font-weight: 500;
-  color: #f4f4f4;
   padding-inline: 16px;
   flex-grow: 1;
 }
@@ -136,10 +135,9 @@ onMounted(async () => {
 }
 .c-panel__info {
   font-size: 12px;
-  color: var(--text-color-secondary);
 }
 .c-panel {
-  background-color: #28292b;
+  background-color: var(--bg-color-secondary);
   display: grid;
   gap: 32px;
   padding: 24px;

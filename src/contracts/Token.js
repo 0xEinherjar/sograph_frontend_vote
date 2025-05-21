@@ -1,5 +1,4 @@
-export const contract = "0xcf5a6076cfa32686c0Df13aBaDa2b40dec133F1d";
-export const abi = [
+export default [
   {
     inputs: [],
     stateMutability: "nonpayable",

@@ -16,3 +16,4 @@ export { default as PanelDepositButton } from "./panel-deposit-button.vue";
 export { default as PanelDeposit } from "./panel-deposit.vue";
 export { default as PanelWithdraw } from "./panel-withdraw.vue";
 export { default as PanelReward } from "./panel-reward.vue";
+export { default as ModalFaucet } from "./modal-faucet.vue";

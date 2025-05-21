@@ -1,12 +1,12 @@
-import { abi, contract } from "../contracts/ProfileGovernance.js";
+import { abi, contract } from "../contracts/";
 import { usePublicClient } from "./usePublicClient.js";
 const { client } = usePublicClient();
 
 export const useReadProfileGovernanceContract = () => {
   async function readProfileGovernanceContract(functionName, args = []) {
     return await client.readContract({
-      abi: abi,
-      address: contract,
+      abi: abi.ProfileGovernance,
+      address: contract.ProfileGovernance,
       functionName: functionName,
       args: args,
     });

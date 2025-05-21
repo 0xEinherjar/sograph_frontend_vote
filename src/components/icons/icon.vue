@@ -5,6 +5,7 @@ const props = defineProps(["iconClass", "name"]);
 const compRef = shallowRef({
   close: Icon.Close,
   add: Icon.Add,
+  wallet: Icon.Wallet,
 });
 </script>
 <!-- prettier-ignore -->

@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
 import { Loading } from "./";
 import { useUtils } from "../composables/utils";
-import { abi, contract } from "../contracts/ProfileGovernance.js";
+import { abi, contract } from "../contracts/";
 import { useErrorStore } from "../store/error.js";
 const props = defineProps(["rewards", "isConnected"]);
 const event = defineEmits(["rewardsClaimed"]);
@@ -16,8 +16,8 @@ async function claim() {
   if (!props.isConnected || !props.rewards) return;
   isLoading.value = true;
   await writeContractAsync({
-    abi: abi,
-    address: contract,
+    abi: abi.ProfileGovernance,
+    address: contract.ProfileGovernance,
     functionName: "claim",
   });
 }

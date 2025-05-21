@@ -27,11 +27,9 @@ const props = defineProps(["avatar", "name", "reasons", "link", "address"]);
   gap: 32px;
   padding: 24px;
   width: 100%;
-  /* border: 1px solid #f4f4f4; */
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-
-  background-color: #28292b;
+  background-color: var(--bg-color-secondary);
 }
 .c-report__header {
   gap: 24px;

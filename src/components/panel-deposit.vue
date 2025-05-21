@@ -2,9 +2,8 @@
 import { ref, watch } from "vue";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
 import { useUtils } from "../composables/utils.js";
-import { abi, contract } from "../contracts/Token.js";
+import { abi, contract } from "../contracts/";
 import { PanelDepositButton, Loading } from "./";
-import { contract as contractVoting } from "../contracts/ProfileGovernance.js";
 const props = defineProps([
   "balance",
   "isConnected",
@@ -28,10 +27,10 @@ async function handleAction() {
   if (amount.value < toNumber(props.minParticipation)) return;
   isLoading.value = true;
   await writeContractAsync({
-    abi: abi,
-    address: contract,
+    abi: abi.Token,
+    address: contract.Token,
     functionName: "approve",
-    args: [contractVoting, amount.value],
+    args: [contract.ProfileGovernance, amount.value],
   });
 }
 

@@ -2,7 +2,7 @@
 import { storeToRefs } from "pinia";
 import { useModeratorStore } from "../store/moderator.js";
 import { useAccount, useDisconnect } from "@wagmi/vue";
-import { Avatar, Logo, CreateProposal, ModalConnect } from "./";
+import { ModalFaucet, Logo, CreateProposal, ModalConnect } from "./";
 const moderatorStore = useModeratorStore();
 const { moderator } = storeToRefs(moderatorStore);
 
@@ -29,7 +29,6 @@ function logout() {
             <li class="c-dropdown__menu-item"><a href="https://sograph.app">Website</a></li>
             <li class="c-dropdown__menu-item"><a href="https://docs.sograph.app">Documentation</a></li>
             <li class="c-dropdown__menu-item"><a href="https://voting.sograph.app">Voting</a></li>
-            <li class="c-dropdown__menu-item"><a href="">Faucet</a></li>
           </ul>
         </div>
         <div class="c-dropdown__line"></div>
@@ -54,6 +53,7 @@ function logout() {
     <nav class="header__nav u-flex-line">
       <router-link to="/" class="header__nav-item">Home</router-link>
       <router-link v-if="isConnected && moderator.isActive" to="/report" class="header__nav-item">Reports</router-link>
+      <modal-faucet className="header__nav-item">Faucet</modal-faucet>
     </nav>
     <div class="header__right u-flex-line">
       <create-proposal classButton="header__button u-flex-line-center" v-if="isConnected && moderator.isActive"/>
@@ -95,7 +95,7 @@ function logout() {
   gap: 6px;
 }
 .header__button {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-color-quinary);
   border-radius: 12px;
   padding-inline: 24px;

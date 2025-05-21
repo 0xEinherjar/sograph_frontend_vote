@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { Icon, Loading } from "./";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
-import { abi, contract } from "../contracts/ProfileGovernance.js";
+import { abi, contract } from "../contracts/";
 import { useErrorStore } from "../store/error.js";
 const errorStore = useErrorStore();
 const { writeContractAsync, data, error } = useWriteContract();
@@ -28,8 +28,8 @@ function togglePlaceholder(event) {
 async function create() {
   isLoading.value = true;
   await writeContractAsync({
-    abi: abi,
-    address: contract,
+    abi: abi.ProfileGovernance,
+    address: contract.ProfileGovernance,
     functionName: "createAssessment",
     args: [form.value.profile, form.value.reason],
   });

@@ -1,11 +1,4 @@
-import {
-  abi as tokenAbi,
-  contract as tokenContract,
-} from "../contracts/Token.js";
-import {
-  abi as votingAbi,
-  contract as votingContract,
-} from "../contracts/ProfileGovernance.js";
+import { abi, contract } from "../contracts/";
 import { usePublicClient } from "./usePublicClient.js";
 import { useUtils } from "./utils.js";
 const { client } = usePublicClient();
@@ -16,18 +9,18 @@ export const usePanelInfo = () => {
     const results = await client.multicall({
       contracts: [
         {
-          abi: tokenAbi,
-          address: tokenContract,
+          abi: abi.Token,
+          address: contract.Token,
           functionName: "decimals",
         },
         {
-          abi: votingAbi,
-          address: votingContract,
+          abi: abi.ProfileGovernance,
+          address: contract.ProfileGovernance,
           functionName: "minimumStakeAmount",
         },
         {
-          abi: tokenAbi,
-          address: tokenContract,
+          abi: abi.Token,
+          address: contract.Token,
           functionName: "name",
         },
       ],

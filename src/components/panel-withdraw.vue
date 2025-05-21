@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useWaitForTransactionReceipt, useWriteContract } from "@wagmi/vue";
-import { abi, contract } from "../contracts/ProfileGovernance.js";
+import { abi, contract } from "../contracts/";
 import { useErrorStore } from "../store/error.js";
 import { Loading } from "./";
 const errorStore = useErrorStore();
@@ -20,8 +20,8 @@ async function unstake() {
   isLoading.value = true;
   const amount = amountVote.value * 10 ** props.decimals;
   await writeContractAsync({
-    abi: abi,
-    address: contract,
+    abi: abi.ProfileGovernance,
+    address: contract.ProfileGovernance,
     functionName: "unstake",
     args: [amount],
   });
